@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -7,10 +10,21 @@ namespace API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet]
-        public string GetProducts()
+        private readonly MyDbContext _context;
+        public ProductsController(MyDbContext context)
         {
-            return "sdada";
+            _context = context;
         }
+        [HttpGet]
+        public IActionResult GetProducts()
+        {
+            return Ok(
+                new
+                {
+                    message= "thanh cong",
+                    data = _context.products.ToList()
+                });
+        }
+
     }
 }

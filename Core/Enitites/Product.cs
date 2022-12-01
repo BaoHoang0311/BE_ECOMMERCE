@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Core.Interfaces;
+using System;
 
-namespace API.Model
+namespace Core.Entites
 {
-    public class Product
+    public class Product : IEntityID
     {
-        public string productId { get; set; }
-        public string productName { get; set; }
+        public string Id { get; set; }
+        public string FullName { get; set; }
         public string productOwner { get; set; }
         public double Amount { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+
     }
 }
