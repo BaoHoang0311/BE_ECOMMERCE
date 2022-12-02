@@ -10,14 +10,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class ProductServices : IProductService
+    public class ProductRepository : IProductService
     {
         private readonly MyDbContext _context; 
-        public ProductServices(MyDbContext context)
+        public ProductRepository(MyDbContext context)
         {
             _context = context;
         }
-
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             var data = await _context.products.ToListAsync();
@@ -28,20 +27,36 @@ namespace Infrastructure.Services
             var data = await _context.products.FindAsync(id);
             return data;
         }
-
-        public async Task<bool> AddAsync(Product entity)
+        public Task<Product> GetByNameAsync(string name)
         {
             throw new NotImplementedException();
         }
+        // create
+        public async Task AddAsync(Product entity)
+        {
+            _context.products.Add(entity);
 
+        }
+        //delete
         public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            var data =await GetByIdAsync(id);
+            if (data != null)
+            {
+                _context.products.Remove(data);
+                await _context.SaveChangesAsync();
+            }
+        }
+        //put
+        public async Task UpdateAsync(string id, Product entity)
+        {
+            if (GetByIdAsync(id) != null)
+            {
+                _context.products.Add(entity);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task<Product> UpdateAsync(string id, Product entity)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

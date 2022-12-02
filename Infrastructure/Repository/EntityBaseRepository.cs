@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Entites;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,6 +38,11 @@ namespace Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
+        public DbSet<T> Get()
+        {
+            return _context.Set<T>();
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             var data = await _context.Set<T>().ToListAsync();
@@ -45,8 +51,13 @@ namespace Infrastructure.Services
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id == id);
+            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id.ToString() == id);
             return data;
+        }
+
+        public Task<Product> GetByNameAsync(string name)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<T> UpdateAsync(string id, T entity)
@@ -54,6 +65,16 @@ namespace Infrastructure.Services
             _context.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
+        }
+
+        Task IEntityBaseRepository<T>.AddAsync(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IEntityBaseRepository<T>.UpdateAsync(string id, T entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

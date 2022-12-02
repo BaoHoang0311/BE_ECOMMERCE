@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Core.Entites;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Core.Interfaces
@@ -7,8 +9,9 @@ namespace Core.Interfaces
     {
         Task<T> GetByIdAsync(string id);
         Task<IEnumerable<T>> GetAllAsync();
-        Task<bool> AddAsync(T entity);
-        Task<T> UpdateAsync(string id, T entity);
+        Task<Product> GetByNameAsync(string name);
+        Task AddAsync(T entity);
+        Task UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);
     }
 }

@@ -1,26 +1,26 @@
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
-
             // Add services to the container.
             var services = builder.Services;
-           
-
             services.AddDbContext<MyDbContext>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("MyDb")));
 
@@ -29,13 +29,7 @@ namespace API
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             // product
-            services.AddScoped<IProductService, ProductServices>();
-
-
-
-
-
-
+            services.AddScoped<IProductService, ProductRepository>();
 
 
             // Configure the HTTP request pipeline.
@@ -52,6 +46,28 @@ namespace API
 
 
             app.MapControllers();
+            
+            // auto update migrations, cd API
+            // dotnet watch run 
+            // auto cập nhật thằng migrations pending
+            using var scope = app.Services.CreateScope();
+            var service = scope.ServiceProvider;
+            var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+            try
+            {
+                var context = service.GetRequiredService<MyDbContext>();
+                await context.Database.MigrateAsync();
+                //Seed product data
+                await MyDbContextSeed.SeedAsync(context, loggerFactory);
+
+                var logger = loggerFactory.CreateLogger<Program>();
+                logger.LogWarning("Success");
+            }
+            catch (Exception ex)
+            {
+                var logger = loggerFactory.CreateLogger<Program>();
+                logger.LogError(ex, "An error occurred during migration");
+            }
 
             app.Run();
         }
