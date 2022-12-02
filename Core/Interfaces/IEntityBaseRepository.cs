@@ -10,6 +10,5 @@ namespace Core.Interfaces
         Task<bool> AddAsync(T entity);
         Task<T> UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);
-       
     }
 }

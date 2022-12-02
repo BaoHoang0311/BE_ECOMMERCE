@@ -1,4 +1,6 @@
+using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,8 +15,12 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+
             // Add services to the container.
             var services = builder.Services;
+           
+
             services.AddDbContext<MyDbContext>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("MyDb")));
 
@@ -22,8 +28,8 @@ namespace API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-
-
+            // product
+            services.AddScoped<IProductService, ProductServices>();
 
 
 
