@@ -20,9 +20,8 @@ namespace Infrastructure.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        #region Dbset
+        // Dbset
         public DbSet<Product> products { get; set; }
-        #endregion
     }
 }
  
