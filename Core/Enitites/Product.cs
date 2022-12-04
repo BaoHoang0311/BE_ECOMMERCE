@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿
+using Core.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -1,5 +1,7 @@
-﻿using Core.Entites;
+﻿using AutoMapper;
+using Core.Entites;
 using Core.Interfaces;
+using Core.ViewModel;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,53 +12,52 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class ProductRepository : IProductService
+    public class ProductRepository : EntityBaseRepository<Product>, IProductRepository
     {
-        private readonly MyDbContext _context; 
-        public ProductRepository(MyDbContext context)
+        private readonly MyDbContext _context;
+        private readonly IMapper _mapper;
+        public ProductRepository(MyDbContext context, IMapper mapper) : base(context)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<Product>> GetAllAsync()
-        {
-            var data = await _context.products.ToListAsync();
-            return data;
-        }
-        public async Task<Product> GetByIdAsync(string id)
-        {
-            var data = await _context.products.FindAsync(id);
-            return data;
-        }
-        public Task<Product> GetByNameAsync(string name)
-        {
-            throw new NotImplementedException();
-        }
-        // create
-        public async Task AddAsync(Product entity)
-        {
-            _context.products.Add(entity);
 
-        }
-        //delete
-        public async Task DeleteAsync(string id)
+        public async Task AddAsync(ProductVM entity)
         {
-            var data =await GetByIdAsync(id);
-            if (data != null)
+            var data = await _context.products.FirstOrDefaultAsync(m => m.FullName == entity.FullName);
+            if (data == null)
             {
-                _context.products.Remove(data);
-                await _context.SaveChangesAsync();
-            }
-        }
-        //put
-        public async Task UpdateAsync(string id, Product entity)
-        {
-            if (GetByIdAsync(id) != null)
-            {
-                _context.products.Add(entity);
+                var pro = _mapper.Map<Product>(entity);
+                pro.Id = Guid.NewGuid().ToString();
+                pro.PictureUrl= 
+                pro.productOwner = "";
+                pro.CreatedDate = DateTime.Now;
+                pro.ModifiedDate = DateTime.Now;
+                pro.ModifiedBy = "";
+
+
+                await _context.products.AddAsync(pro);
                 await _context.SaveChangesAsync();
             }
         }
 
+        public async Task UpdateAsync(string id, ProductVM entity)
+        {
+            var data = await _context.products.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            if(data != null)
+            {
+                var pro = _mapper.Map<Product>(entity);
+                pro.Id = data.Id;
+                pro.productOwner = "";
+                pro.CreatedDate = data.CreatedDate;
+                pro.ModifiedDate = DateTime.Now;
+                pro.ModifiedBy = "";
 
+
+                _context.products.Update(pro);
+                await _context.SaveChangesAsync();
+            }
+
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Core.Interfaces;
+﻿using API.Extension;
+using API.Helpers;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -23,14 +25,15 @@ namespace API
             var services = builder.Services;
             services.AddDbContext<MyDbContext>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("MyDb")));
-
+            services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddScoped<Saveimage>();
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             // product
-            services.AddScoped<IProductService, ProductRepository>();
-
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped(typeof(IEntityBaseRepository<>),typeof(EntityBaseRepository<>) );
 
             // Configure the HTTP request pipeline.
             var app = builder.Build();
@@ -43,13 +46,12 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseStaticFiles();
 
             app.MapControllers();
-            
-            // auto update migrations, cd API
-            // dotnet watch run 
-            // auto cập nhật thằng migrations pending
+
+            // auto update migrations, cd API ->dotnet watch run 
+            // auto cập nhật ~ thằng migrations pending khi pull form github
             using var scope = app.Services.CreateScope();
             var service = scope.ServiceProvider;
             var loggerFactory = service.GetRequiredService<ILoggerFactory>();
@@ -61,7 +63,7 @@ namespace API
                 await MyDbContextSeed.SeedAsync(context, loggerFactory);
 
                 var logger = loggerFactory.CreateLogger<Program>();
-                logger.LogWarning("Success");
+                logger.LogWarning("Success Migrations");
             }
             catch (Exception ex)
             {

@@ -19,12 +19,13 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // setting for Configuration Enitity
+            // setting for Configuration Enitity, apply for ProductConfiguration
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         // Dbset
         public DbSet<Product> products { get; set; }
+
     }
 }
  

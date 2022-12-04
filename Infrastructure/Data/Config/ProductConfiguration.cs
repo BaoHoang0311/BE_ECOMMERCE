@@ -18,6 +18,7 @@ namespace Infrastructure.Data.Config
             builder.Property(p => p.productOwner).HasMaxLength(100);
             builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
             builder.Property(p => p.PictureUrl).IsRequired();
+
         }
     }
 }
