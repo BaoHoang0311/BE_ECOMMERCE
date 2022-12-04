@@ -19,21 +19,18 @@ namespace Infrastructure.Data
         {
             try
             {
-                //if (!context.productsBrand.Any())
+                //if (!context.ProductBrands.Any())
                 //{
-                //    var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/productsBrand.json");
+                //    var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
                 //    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
-                //    await context.Database.OpenConnectionAsync();
-                    
-                //    await context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT productsBrand ON");
+
                 //    foreach (var item in brands)
                 //    {
-                //        context.productsBrand.Add(item);
+                //        context.ProductBrands.Add(item);
                 //    }
-                //    await context.SaveChangesAsync();
-                //    context.Database.CloseConnection();
-                //}
 
+                //    await context.SaveChangesAsync();
+                //}
 
                 if (!context.products.Any())
                 {

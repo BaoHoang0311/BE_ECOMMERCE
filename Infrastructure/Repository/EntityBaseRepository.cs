@@ -1,48 +1,25 @@
 ﻿using Core.Entites;
 using Core.Interfaces;
+using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
 
 namespace Infrastructure.Services
 {
-    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID, new()
+    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID ,new()
     {
         private readonly MyDbContext _context;
         public EntityBaseRepository(MyDbContext context)
         {
             _context = context;
         }
-
-        public async Task<bool> AddAsync(T entity)
-        {
-            var check = await _context.Set<T>().FirstOrDefaultAsync(m => m.FullName == entity.FullName);
-            if (check != null)
-            {
-                return false;
-            }
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var data = GetByIdAsync(id);
-            _context.Remove(data);
-            await _context.SaveChangesAsync();
-        }
-
-        public DbSet<T> Get()
-        {
-            return _context.Set<T>();
-        }
-
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             var data = await _context.Set<T>().ToListAsync();
@@ -51,30 +28,58 @@ namespace Infrastructure.Services
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id.ToString() == id);
+            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id == id);
+            return data;
+        }
+        public async Task<T> GetByNameAsync(string name)
+        {
+            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.FullName == name);
             return data;
         }
 
-        public Task<Product> GetByNameAsync(string name)
+        public async Task AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.FullName == entity.FullName);
+            if(data == null)
+            {
+                data.CreatedDate = DateTime.Now;
+                await _context.Set<T>().AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task UpdateAsync(string id, T entity)
+        {
+            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id  == entity.Id);
+            if(data != null)
+            {
+                entity.ModifiedDate = DateTime.Now;
+                _context.Set<T>().Update(entity);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task<T> UpdateAsync(string id, T entity)
+        public async Task DeleteAsync(string id)
         {
-            _context.Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            var data = await GetByIdAsync(id);
+            if(data != null)
+            {
+                _context.Remove(data);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        Task IEntityBaseRepository<T>.AddAsync(T entity)
+        public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
         {
-            throw new NotImplementedException();
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
-        Task IEntityBaseRepository<T>.UpdateAsync(string id, T entity)
+        public async Task<List<T>> ListAsync(ISpecification<T> spec)
         {
-            throw new NotImplementedException();
+            return await ApplySpecification(spec).ToListAsync();
+        }
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
     }
 }
