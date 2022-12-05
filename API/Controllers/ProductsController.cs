@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Core.Entites;
-using Core.Interfaces;
-using Core.Specifications;
-using Core.ViewModel;
-using Infrastructure.Data;
+﻿using API.Dtos;
+using API.Entites;
+using API.Repository;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -83,7 +81,7 @@ namespace API.Controllers
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductVM productVM)
+        public async Task<IActionResult> CreateProduct(ProductDtos productVM)
         {
             try
             {
@@ -101,11 +99,11 @@ namespace API.Controllers
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(string id, ProductVM productVM)
+        public async Task<IActionResult> UpdateProduct(string id, ProductDtos productsDtos)
         {
             try
             {
-                await _productRepository.UpdateAsync(id, productVM);
+                await _productRepository.UpdateAsync(id, productsDtos);
                 return Ok(
                     new
                     {

@@ -1,8 +1,7 @@
-﻿using API.Extension;
+﻿using API.Data;
 using API.Helpers;
-using Core.Interfaces;
-using Infrastructure.Data;
-using Infrastructure.Services;
+using API.Repository;
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +25,13 @@ namespace API
             services.AddDbContext<MyDbContext>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("MyDb")));
             services.AddAutoMapper(typeof(MappingProfiles));
-            services.AddScoped<Saveimage>();
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             // product
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductRepository, ProductServices>();
+            services.AddScoped<ICustomerRepository,CustomerServices>();
             services.AddScoped(typeof(IEntityBaseRepository<>),typeof(EntityBaseRepository<>) );
 
             // Configure the HTTP request pipeline.
