@@ -20,7 +20,7 @@ namespace Core.Specifications
         public Expression<Func<T, bool>> Condition { get; }
 
         public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
-        public void Add_Include(Expression<Func<T, object>> includeExpess)
+        protected void Add_Include(Expression<Func<T, object>> includeExpess)
         {
             Includes.Add(includeExpess);
         }
