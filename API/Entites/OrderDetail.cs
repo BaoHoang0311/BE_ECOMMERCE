@@ -10,11 +10,10 @@ namespace API.Entites
 
         public string OrderNo { get; set; }
         public int ammount { get; set; }
-        public int quantity { get; set; }
+        public int price { get; set; }
         public decimal TotalPrice { get; set; }
 
         public string OrderId { get; set; }
-        [ForeignKey("OrderId")]
         public Order Order { get; set; }
 
         public string ProductId { get; set; }

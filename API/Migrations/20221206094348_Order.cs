@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class order : Migration
+    public partial class Order : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,6 +16,14 @@ namespace API.Migrations
             migrationBuilder.DropPrimaryKey(
                 name: "PK_customers",
                 table: "customers");
+
+            migrationBuilder.DropColumn(
+                name: "PictureUrl",
+                table: "products");
+
+            migrationBuilder.DropColumn(
+                name: "Price",
+                table: "products");
 
             migrationBuilder.RenameTable(
                 name: "products",
@@ -66,7 +74,7 @@ namespace API.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderNo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ammount = table.Column<int>(type: "int", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
+                    price = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -131,6 +139,20 @@ namespace API.Migrations
             migrationBuilder.RenameTable(
                 name: "Customers",
                 newName: "customers");
+
+            migrationBuilder.AddColumn<string>(
+                name: "PictureUrl",
+                table: "products",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "Price",
+                table: "products",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m);
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_products",

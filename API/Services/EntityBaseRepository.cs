@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID ,new()
+    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID , new()
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper; 

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using API.Entites;
 
-namespace Infrastructure.Data.Config
+namespace API.Data.Config
 {
     public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetail>
     {

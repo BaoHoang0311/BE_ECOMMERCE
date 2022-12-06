@@ -9,20 +9,25 @@ namespace API.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<ProductDtos,Product>()
+            CreateMap<ProductDtos, Product>()
                 .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName))
-                .ForMember(d => d.PictureUrl, o => o.MapFrom(s => s.PictureUrl))
-                .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount))
-                .ForMember(d => d.Price, o => o.MapFrom(s => s.Price));
+                .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount));
 
-            CreateMap<Product,Product> ()
+            CreateMap<Product, Product>()
                     .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName))
-                    .ForMember(d => d.PictureUrl, o => o.MapFrom(s => s.PictureUrl))
-                    .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount))
-                    .ForMember(d => d.Price, o => o.MapFrom(s => s.Price))
-                    .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
+                    .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount));
 
             CreateMap<CustomerDtos, Customer>();
+
+            CreateMap<OrderDtos, Order>()
+                .ForMember(d => d.OrderNo, o => o.MapFrom(s => s.OrderNo))
+                .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId));
+
+            CreateMap<OrderDetailDtos, OrderDetail>()
+                .ForMember(d => d.ProductId, o => o.MapFrom(s => s.ProductId))
+                .ForMember(d => d.ammount, o => o.MapFrom(s => s.ProductAmmount))
+                .ForMember(d => d.price, o => o.MapFrom(s => s.Price));
+                
 
         }
     }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20221205131733_order")]
-    partial class order
+    [Migration("20221206094348_Order")]
+    partial class Order
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,7 +130,7 @@ namespace API.Migrations
                     b.Property<int>("ammount")
                         .HasColumnType("int");
 
-                    b.Property<int>("quantity")
+                    b.Property<int>("price")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -167,13 +167,6 @@ namespace API.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("productOwner")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -186,7 +179,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entites.Order", b =>
                 {
                     b.HasOne("API.Entites.Customer", "customer")
-                        .WithMany()
+                        .WithMany("order")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -208,6 +201,11 @@ namespace API.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("API.Entites.Customer", b =>
+                {
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("API.Entites.Order", b =>

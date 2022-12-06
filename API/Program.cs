@@ -29,9 +29,11 @@ namespace API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            // product
+
             services.AddScoped<IProductRepository, ProductServices>();
             services.AddScoped<ICustomerRepository,CustomerServices>();
+            services.AddScoped<IOrderRepository, OrderServices>();
+
             services.AddScoped(typeof(IEntityBaseRepository<>),typeof(EntityBaseRepository<>) );
 
             // Configure the HTTP request pipeline.
