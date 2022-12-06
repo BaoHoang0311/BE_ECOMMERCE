@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20221205112824_order")]
+    [Migration("20221205131733_order")]
     partial class order
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,7 +197,8 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entites.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("API.Entites.Product", "Product")
                         .WithMany()

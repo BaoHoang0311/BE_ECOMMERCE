@@ -1,6 +1,7 @@
 ﻿using API.Entites;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace API.Data
 {
@@ -19,8 +20,18 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // setting for Configuration Enitity, apply for ProductConfiguration
+            //// setting for Configuration Enitity, apply for ProductConfiguration
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<OrderDetail>()
+                        .HasOne(e => e.Order)
+                        .WithMany(e => e.OrderDetails)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Order>()
+                            .HasOne(e => e.customer)
+                            .WithMany(e => e.order)
+                            .OnDelete(DeleteBehavior.Cascade);
         }
 
         // Dbset

@@ -6,6 +6,10 @@ namespace API.Entites
 {
     public class Order
     {
+        public Order()
+        {
+            OrderDetails = new();
+        }
         public string Id { get; set; }
 
         public string OrderNo { get; set; }

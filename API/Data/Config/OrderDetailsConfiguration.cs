@@ -16,8 +16,6 @@ namespace Infrastructure.Data.Config
             builder.Property(p => p.Id).IsRequired();
             builder.Property(p => p.OrderNo).IsRequired().HasMaxLength(100);
             builder.Property(p => p.TotalPrice).HasColumnType("decimal(18,2)");
-            //builder.HasOne(p=>p.Order).WithMany()
-            //    .HasForeignKey(p=> p.OrderId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(p => p.Product).WithMany()
                     .HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.Cascade);
         }

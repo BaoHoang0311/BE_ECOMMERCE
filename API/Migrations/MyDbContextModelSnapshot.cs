@@ -195,7 +195,8 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entites.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("API.Entites.Product", "Product")
                         .WithMany()
