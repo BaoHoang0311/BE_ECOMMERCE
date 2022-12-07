@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API
@@ -36,6 +37,11 @@ namespace API
 
             services.AddScoped(typeof(IEntityBaseRepository<>),typeof(EntityBaseRepository<>) );
 
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
             // Configure the HTTP request pipeline.
             var app = builder.Build();
             if (app.Environment.IsDevelopment())

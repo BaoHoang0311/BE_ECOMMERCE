@@ -9,6 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace API.Services
 {
@@ -22,38 +23,81 @@ namespace API.Services
             _mapper = mapper;
         }
 
-
         public async Task AddOrderAsync(OrderDtos orderDtos)
         {
-            var order = _mapper.Map<Order>(orderDtos);
-            order.Id = Guid.NewGuid().ToString();
-
-            order.CreatedBy = "admin";
-            order.CreatedDate = DateTime.Now;
-            order.ModifiedDate = DateTime.Now;
-            order.ModifiedBy = "admin";
-
-            order.TotalPrice = 0;
-            if(orderDtos.orderDetailDtos.Count > 0)
+            var cus = _context.Customers.FirstOrDefaultAsync(o=>o.Id ==orderDtos.CustomerId);
+            if(cus!= null)
             {
-                order.TotalPrice = orderDtos.orderDetailDtos.Aggregate(order.TotalPrice, (a, b) => a + (b.Price * b.ProductAmmount));
-            }
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+                var order = _mapper.Map<Order>(orderDtos);
+                order.Id = Guid.NewGuid().ToString();
 
-            if (orderDtos.orderDetailDtos.Count > 0)
-            {
-                foreach (var item in orderDtos.orderDetailDtos)
+                order.CreatedBy = "admin";
+                order.CreatedDate = DateTime.Now;
+                order.ModifiedDate = DateTime.Now;
+                order.ModifiedBy = "admin";
+
+                order.TotalPrice = 0;
+                if (orderDtos.orderDetailDtos.Count > 0)
                 {
-                    if (checkammount(item) == true && UpdateAmmount(item))
+                    order.TotalPrice = orderDtos.orderDetailDtos.Aggregate(order.TotalPrice, (a, b) => a + (b.Price * b.ProductAmmount));
+                }
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                if (orderDtos.orderDetailDtos.Count > 0)
+                {
+                    foreach (var item in orderDtos.orderDetailDtos)
                     {
-                        var orderDetail = _mapper.Map<OrderDetail>(item);
-                        
-                        _context.OrderDetails.Add(orderDetail);
-                        await _context.SaveChangesAsync();
+                        if (checkammount(item) == true && UpdateAmmount(item))
+                        {
+                            var orderDetail = _mapper.Map<OrderDetail>(item);
+
+                            orderDetail.Id = Guid.NewGuid().ToString();
+
+                            orderDetail.OrderNo = "";
+
+                            orderDetail.CreatedBy = "";
+                            orderDetail.CreatedDate = DateTime.Now;
+                            orderDetail.ModifiedDate = DateTime.Now;
+                            orderDetail.OrderId = order.Id;
+
+                            orderDetail.TotalPrice = item.Price * item.ProductAmmount;
+
+                            _context.OrderDetails.Add(orderDetail);
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
             }
+            else
+            {
+
+            }
+
+        }
+
+        public Task<Order> GetCusOrder()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<Order>> GetListOrder()
+        {
+
+            return null;
+        }
+
+        public async Task<Order> GetOrderbyIdCus(string CusId)
+        {
+            var cus = await _context.Customers.FirstOrDefaultAsync(x => x.Id == CusId);
+            if(cus!= null)
+            {
+                var listorder = await _context.Orders.Include(o => o.customer)
+                                                    .Include(o => o.OrderDetails)
+                                                    .FirstOrDefaultAsync(o=>o.CustomerId == cus.Id);
+                return listorder;
+            }
+            return null;
         }
 
         private bool checkammount(OrderDetailDtos orderDetail)
@@ -69,9 +113,11 @@ namespace API.Services
         private bool UpdateAmmount(OrderDetailDtos orderDetailDtos)
         {
             var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetailDtos.ProductId);
+
             if (sp != null)
             {
                 sp.Amount =sp.Amount - orderDetailDtos.ProductAmmount;
+
                 _context.Products.Attach(sp);
                 _context.Entry(sp).Property(x => x.Amount).IsModified = true;
                 _context.SaveChanges();

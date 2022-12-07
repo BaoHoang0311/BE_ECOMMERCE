@@ -12,5 +12,7 @@ namespace API.Repository
     public interface IOrderRepository
     {
         Task AddOrderAsync(OrderDtos orderDtos);
+        Task<IList<Order>> GetListOrder();
+        Task<Order> GetOrderbyIdCus(string CusId);
     }
 }

@@ -4,6 +4,7 @@ using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -19,10 +20,24 @@ namespace API.Controllers
             _orderRepository = services;
             _mapper = mapper;
         }
-        [HttpGet]
-        public IActionResult GetOrder()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderbyIdCus(string id)
         {
-            return Ok();
+            try
+            {
+                var listOrder = await _orderRepository.GetOrderbyIdCus(id);
+                return Ok(
+                    new
+                    {
+                        message = "Ok",
+                        data = listOrder,
+                    });
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
         [HttpPost]
         public async Task<IActionResult> AddOrder(OrderDtos orderDtos)
@@ -30,7 +45,7 @@ namespace API.Controllers
             try
             {
                 await _orderRepository.AddOrderAsync(orderDtos);
-                 return Ok();
+                 return Ok(new {message= "AddOrder thanh cong" });
             }
             catch
             {
