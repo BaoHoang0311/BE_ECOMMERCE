@@ -1,6 +1,7 @@
-﻿using API.Data;
-using API.Repository;
-using AutoMapper;
+﻿using Core.Entites;
+using Core.Interfaces;
+using Core.Specifications;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace API.Services
+namespace Infrastructure.Services
 {
-    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID , new()
+    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID ,new()
     {
         private readonly MyDbContext _context;
-        private readonly IMapper _mapper; 
-        public EntityBaseRepository(MyDbContext context, IMapper mapper)
+        public EntityBaseRepository(MyDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -69,5 +68,18 @@ namespace API.Services
             }
         }
 
+        public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<T>> ListAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).ToListAsync();
+        }
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+        }
     }
 }

@@ -20,19 +20,21 @@ namespace API.Controllers
             _orderRepository = services;
             _mapper = mapper;
         }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderbyIdCus(string id)
         {
             try
             {
                 var listOrder = await _orderRepository.GetOrderbyIdCus(id);
+
                 return Ok(
                     new
                     {
                         message = "Ok",
                         data = listOrder,
                     });
-
             }
             catch
             {
@@ -52,6 +54,25 @@ namespace API.Controllers
                 return BadRequest();
             }
 
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrderbyIdCus(string id)
+        {
+            try
+            {
+                 await _orderRepository.DeleteAsync(id);
+
+                return Ok(
+                    new
+                    {
+                        message = "DeleteOrderbyIdCus thanh cong",
+                    });
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

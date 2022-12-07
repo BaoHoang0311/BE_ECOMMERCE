@@ -12,10 +12,7 @@ namespace API.Dtos
         [Required]
         public string FullName { get; set; }
         [Required]
-        public string PictureUrl { get; set; }
-        [Required]
         public int Amount { get; set; }
-        [Required]
-        public decimal Price { get; set; }
+
     }
 }

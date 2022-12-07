@@ -21,17 +21,32 @@ namespace API.Data
         {
             base.OnModelCreating(modelBuilder);
             //// setting for Configuration Enitity, apply for ProductConfiguration
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             modelBuilder.Entity<OrderDetail>()
                         .HasOne(e => e.Order)
                         .WithMany(e => e.OrderDetails)
+                        .HasForeignKey(ur => ur.OrderId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Order>()
-                            .HasOne(e => e.customer)
-                            .WithMany(e => e.order)
-                            .OnDelete(DeleteBehavior.Cascade);
+
+            //modelBuilder.Entity<OrderDetail>()
+            //            .HasOne(e => e.Product)
+            //            .WithMany(e => e.orderDetails)
+            //            .HasForeignKey(ur => ur.ProductId)
+            //            .OnDelete(DeleteBehavior.Cascade);
+
+            //modelBuilder.Entity<Order>()
+            //            .HasOne(e => e.customer)
+            //            .WithMany(e => e.order)
+            //            .HasForeignKey(ur => ur.CustomerId)
+            //            .OnDelete(DeleteBehavior.Cascade);
+
+            //modelBuilder.Entity<Order>()
+            //            .HasOne(e => e.customer)
+            //            .WithMany(e => e.order)
+            //            .HasForeignKey(ur => ur.CustomerId)
+            //            .OnDelete(DeleteBehavior.Cascade);
+
         }
 
         // Dbset

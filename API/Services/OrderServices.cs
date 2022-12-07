@@ -25,7 +25,7 @@ namespace API.Services
 
         public async Task AddOrderAsync(OrderDtos orderDtos)
         {
-            var cus = _context.Customers.FirstOrDefaultAsync(o=>o.Id ==orderDtos.CustomerId);
+            var cus = await  _context.Customers.FirstOrDefaultAsync(o=>o.Id ==orderDtos.CustomerId);
             if(cus!= null)
             {
                 var order = _mapper.Map<Order>(orderDtos);
@@ -43,6 +43,8 @@ namespace API.Services
                 }
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
+
+
 
                 if (orderDtos.orderDetailDtos.Count > 0)
                 {
@@ -76,30 +78,33 @@ namespace API.Services
 
         }
 
-        public Task<Order> GetCusOrder()
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            var data = await _context.Orders.FirstOrDefaultAsync(x => x.CustomerId == id);
+            if (data != null)
+            {
+                _context.Remove(data);
+                await _context.SaveChangesAsync();
+            }
+
         }
 
-        public async Task<IList<Order>> GetListOrder()
-        {
-
-            return null;
-        }
-
-        public async Task<Order> GetOrderbyIdCus(string CusId)
+        public async Task<IList<Order>> GetOrderbyIdCus(string CusId)
         {
             var cus = await _context.Customers.FirstOrDefaultAsync(x => x.Id == CusId);
             if(cus!= null)
             {
-                var listorder = await _context.Orders.Include(o => o.customer)
-                                                    .Include(o => o.OrderDetails)
-                                                    .FirstOrDefaultAsync(o=>o.CustomerId == cus.Id);
+                var listorder = await _context.Orders.Include(o => o.OrderDetails).ThenInclude(o=>o.Product)
+                                                    .ToListAsync();
+
+                if (listorder != null)
+                {
+                    listorder = listorder.Where(x => x.CustomerId == CusId).ToList();
+                }
                 return listorder;
             }
             return null;
         }
-
         private bool checkammount(OrderDetailDtos orderDetail)
         {
             var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId);
@@ -110,6 +115,8 @@ namespace API.Services
             }
             return false;
         }
+
+
         private bool UpdateAmmount(OrderDetailDtos orderDetailDtos)
         {
             var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetailDtos.ProductId);

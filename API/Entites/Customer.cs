@@ -23,6 +23,5 @@ namespace API.Entites
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
-        public List<Order> order { get; set; }
     }
 }

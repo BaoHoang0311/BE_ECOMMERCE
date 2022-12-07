@@ -5,50 +5,54 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class Order : Migration
+    public partial class dbInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_products",
-                table: "products");
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_customers",
-                table: "customers");
-
-            migrationBuilder.DropColumn(
-                name: "PictureUrl",
-                table: "products");
-
-            migrationBuilder.DropColumn(
-                name: "Price",
-                table: "products");
-
-            migrationBuilder.RenameTable(
-                name: "products",
-                newName: "Products");
-
-            migrationBuilder.RenameTable(
-                name: "customers",
-                newName: "Customers");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Products",
-                table: "Products",
-                column: "Id");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Customers",
-                table: "Customers",
-                column: "Id");
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    productOwner = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderNo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    OrderNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -63,8 +67,7 @@ namespace API.Migrations
                         name: "FK_Orders_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -72,7 +75,7 @@ namespace API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderNo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    OrderNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ammount = table.Column<int>(type: "int", nullable: false),
                     price = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -96,8 +99,7 @@ namespace API.Migrations
                         name: "FK_OrderDetails_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -124,45 +126,11 @@ namespace API.Migrations
             migrationBuilder.DropTable(
                 name: "Orders");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Products",
-                table: "Products");
+            migrationBuilder.DropTable(
+                name: "Products");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Customers",
-                table: "Customers");
-
-            migrationBuilder.RenameTable(
-                name: "Products",
-                newName: "products");
-
-            migrationBuilder.RenameTable(
-                name: "Customers",
-                newName: "customers");
-
-            migrationBuilder.AddColumn<string>(
-                name: "PictureUrl",
-                table: "products",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<decimal>(
-                name: "Price",
-                table: "products",
-                type: "decimal(18,2)",
-                nullable: false,
-                defaultValue: 0m);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_products",
-                table: "products",
-                column: "Id");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_customers",
-                table: "customers",
-                column: "Id");
+            migrationBuilder.DropTable(
+                name: "Customers");
         }
     }
 }

@@ -31,9 +31,11 @@ namespace API
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
+            services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
             services.AddScoped<IProductRepository, ProductServices>();
             services.AddScoped<ICustomerRepository,CustomerServices>();
             services.AddScoped<IOrderRepository, OrderServices>();
+
 
             services.AddScoped(typeof(IEntityBaseRepository<>),typeof(EntityBaseRepository<>) );
 

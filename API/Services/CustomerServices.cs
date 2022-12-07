@@ -29,6 +29,7 @@ namespace API.Services
                 pro.FullName = entity.FullName;
                 pro.Email= entity.Email;
                 pro.Password = entity.Password;
+
                 pro.CreatedBy = "";
                 pro.CreatedDate = DateTime.Now;
                 pro.ModifiedDate = DateTime.Now;

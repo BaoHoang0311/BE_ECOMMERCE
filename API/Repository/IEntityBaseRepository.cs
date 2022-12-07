@@ -1,5 +1,4 @@
-﻿using API.Specifications;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,10 +15,7 @@ namespace API.Repository
         Task UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);
 
-        // Include Entity with condition
-        Task<T> GetEntityWithSpec(ISpecification<T> spec);
-        // Include Entity
-        Task<List<T>> ListAsync(ISpecification<T> spec);
+
     }
 
 }

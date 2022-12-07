@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20221206094348_Order")]
-    partial class Order
+    [Migration("20221207071728_dbInit")]
+    partial class dbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,9 +82,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrderNo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -117,9 +115,7 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OrderNo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
@@ -158,8 +154,7 @@ namespace API.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -168,8 +163,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("productOwner")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -179,9 +173,8 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entites.Order", b =>
                 {
                     b.HasOne("API.Entites.Customer", "customer")
-                        .WithMany("order")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("customer");
                 });
@@ -195,17 +188,11 @@ namespace API.Migrations
 
                     b.HasOne("API.Entites.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("API.Entites.Customer", b =>
-                {
-                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("API.Entites.Order", b =>

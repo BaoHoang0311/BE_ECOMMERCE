@@ -11,11 +11,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CutomersController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
-        public CutomersController(ICustomerRepository services, IMapper mapper)
+        public CustomersController(ICustomerRepository services, IMapper mapper)
         {
             _customerRepository = services;
             _mapper = mapper;
@@ -60,19 +60,22 @@ namespace API.Controllers
                 data = dulieu_map
             });
         }
-        [HttpGet("name")]
-        public async Task<IActionResult> GetCustomersByName(string name)
-        {
-            var dulieu = await _customerRepository.GetByNameAsync(name);
-            if (dulieu == null) return NotFound();
-            var dulieu_map = dulieu;
 
-            return Ok(new
-            {
-                message = "GetCustomersByName thanh cong",
-                data = dulieu_map
-            });
-        }
+        //[HttpGet("name")]
+        //public async Task<IActionResult> GetCustomersByName(string name)
+        //{
+        //    var dulieu = await _customerRepository.GetByNameAsync(name);
+        //    if (dulieu == null) return NotFound();
+        //    var dulieu_map = dulieu;
+
+        //    return Ok(new
+        //    {
+        //        message = "GetCustomersByName thanh cong",
+        //        data = dulieu_map
+        //    });
+        //}
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomrer(string id)
         {
@@ -108,6 +111,7 @@ namespace API.Controllers
             }
         }
         [HttpPut]
+        //https://localhost:44381/api/Customers?id=21862dcd-b42c-4468-9b8d-f86d9f5fcc6f
         public async Task<IActionResult> UpdateProduct(string id, CustomerDtos customersDtos)
         {
             try

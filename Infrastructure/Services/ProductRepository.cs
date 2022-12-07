@@ -1,8 +1,8 @@
-﻿using API.Data;
-using API.Dtos;
-using API.Entites;
-using API.Repository;
-using AutoMapper;
+﻿using AutoMapper;
+using Core.Entites;
+using Core.Interfaces;
+using Infrastructure.Data;
+using Infrastructure.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,13 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Services
+namespace Infrastructure.Services
 {
-    public class ProductServices : EntityBaseRepository<Product>, IProductRepository
+    public class ProductRepository : EntityBaseRepository<Product>, IProductRepository
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
-        public ProductServices(MyDbContext context, IMapper mapper) :base(context,mapper)
+        public ProductRepository(MyDbContext context, IMapper mapper) : base(context)
         {
             _context = context;
             _mapper = mapper;
@@ -24,27 +24,25 @@ namespace API.Services
 
         public async Task AddAsync(ProductDtos entity)
         {
-            var data = await _context.Products.FirstOrDefaultAsync(m => m.FullName == entity.FullName);
+            var data = await _context.products.FirstOrDefaultAsync(m => m.FullName == entity.FullName);
             if (data == null)
             {
                 var pro = _mapper.Map<Product>(entity);
                 pro.Id = Guid.NewGuid().ToString();
                 pro.productOwner = "";
-
-                pro.CreatedBy = "";
                 pro.CreatedDate = DateTime.Now;
                 pro.ModifiedDate = DateTime.Now;
                 pro.ModifiedBy = "";
 
 
-                await _context.Products.AddAsync(pro);
+                await _context.products.AddAsync(pro);
                 await _context.SaveChangesAsync();
             }
         }
 
         public async Task UpdateAsync(string id, ProductDtos entity)
         {
-            var data = await _context.Products.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            var data = await _context.products.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             if(data != null)
             {
                 var pro = _mapper.Map<Product>(entity);
@@ -55,9 +53,10 @@ namespace API.Services
                 pro.ModifiedBy = "";
 
 
-                _context.Products.Update(pro);
+                _context.products.Update(pro);
                 await _context.SaveChangesAsync();
             }
+
         }
     }
 }

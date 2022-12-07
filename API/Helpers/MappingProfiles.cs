@@ -9,13 +9,9 @@ namespace API.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<ProductDtos, Product>()
+            CreateMap<ProductDtos,Product>()
                 .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName))
                 .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount));
-
-            CreateMap<Product, Product>()
-                    .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName))
-                    .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount));
 
             CreateMap<CustomerDtos, Customer>();
 

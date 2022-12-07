@@ -57,7 +57,7 @@ namespace API.Controllers
             
 
             if (dulieu == null) return NotFound();
-            var dulieu_map = _mapper.Map<IEnumerable<Product>>(dulieu);
+            var dulieu_map = _mapper.Map<Product>(dulieu);
 
             return Ok(new 
             {
@@ -65,20 +65,22 @@ namespace API.Controllers
                 data = dulieu_map
             });
         }
-        // api/Products/name?name=36a8b2df-749b-4eb8-a654-b37c5fa65181
-        [HttpGet("name")]
-        public async Task<IActionResult> GetProductByName(string name)
-        {
-            var dulieu = await _productRepository.GetByNameAsync(name);
-            if (dulieu == null) return NotFound();
-            var dulieu_map = _mapper.Map<IEnumerable<Product>>(dulieu);
 
-            return Ok(new
-            {
-                message = " GetProductByName thanh cong",
-                data = dulieu_map
-            });
-        }
+        // api/Products/name?name=36a8b2df-749b-4eb8-a654-b37c5fa65181
+        //[HttpGet("name")]
+        //public async Task<IActionResult> GetProductByName(string name)
+        //{
+        //    var dulieu = await _productRepository.GetByNameAsync(name);
+        //    if (dulieu == null) return NotFound();
+        //    var dulieu_map = dulieu;
+
+        //    return Ok(new
+        //    {
+        //        message = " GetProductByName thanh cong",
+        //        data = dulieu_map
+        //    });
+        //}
+
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         [HttpPost]
         public async Task<IActionResult> CreateProduct(ProductDtos productVM)
@@ -98,6 +100,7 @@ namespace API.Controllers
             }
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+        //https://localhost:44381/api/Products?id=9dc0c168-a572-4269-b401-31c889158d35
         [HttpPut]
         public async Task<IActionResult> UpdateProduct(string id, ProductDtos productsDtos)
         {
