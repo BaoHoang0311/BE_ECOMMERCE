@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Entites;
 using API.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -32,31 +33,10 @@ namespace API.Services
             var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id == id);
             return data;
         }
-        public async Task<T> GetByNameAsync(string name)
+        public IQueryable<T> GetQuery()
         {
-            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.FullName == name);
+            var data =  _context.Set<T>().AsQueryable();
             return data;
-        }
-
-        public async Task AddAsync(T entity)
-        {
-            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.FullName == entity.FullName);
-            if(data == null)
-            {
-                data.CreatedDate = DateTime.Now;
-                await _context.Set<T>().AddAsync(entity);
-                await _context.SaveChangesAsync();
-            }
-        }
-        public async Task UpdateAsync(string id, T entity)
-        {
-            var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id  == entity.Id);
-            if(data != null)
-            {
-                entity.ModifiedDate = DateTime.Now;
-                _context.Set<T>().Update(entity);
-                await _context.SaveChangesAsync();
-            }
         }
 
         public async Task DeleteAsync(string id)

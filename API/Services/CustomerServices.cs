@@ -19,7 +19,7 @@ namespace API.Services
             _mapper = mapper;
         }
 
-        public async Task AddAsync(CustomerDtos entity)
+        public async Task<bool> AddAsync(CustomerDtos entity)
         {
             var data = await _context.Customers.FirstOrDefaultAsync(m => m.FullName == entity.FullName);
             if (data == null)
@@ -28,7 +28,6 @@ namespace API.Services
                 pro.Id = Guid.NewGuid().ToString();
                 pro.FullName = entity.FullName;
                 pro.Email= entity.Email;
-                pro.Password = entity.Password;
 
                 pro.CreatedBy = "";
                 pro.CreatedDate = DateTime.Now;
@@ -37,17 +36,18 @@ namespace API.Services
 
                 await _context.Customers.AddAsync(pro);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
 
-        public async Task UpdateAsync(string id, CustomerDtos entity)
+        public async Task<bool> UpdateAsync( CustomerDtos entity)
         {
-            var data = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            var data = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.Id == entity.Id);
             if (data != null)
             {
                 var pro = _mapper.Map<Customer>(entity);
-                pro.Id = data.Id;
-
+                
                 pro.CreatedBy =data.CreatedBy;
                 pro.CreatedDate = data.CreatedDate;
                 pro.ModifiedDate = DateTime.Now;
@@ -56,7 +56,9 @@ namespace API.Services
 
                 _context.Customers.Update(pro);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
     }
 }

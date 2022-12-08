@@ -10,8 +10,8 @@ namespace API.Repository
 {
     public interface IProductRepository : IEntityBaseRepository<Product>
     {
-        Task AddAsync(ProductDtos entity);
+        Task<bool> AddAsync(ProductDtos entity);
 
-        Task UpdateAsync(string id, ProductDtos entity);
+        Task<bool> UpdateAsync(ProductDtos entity);
     }
 }

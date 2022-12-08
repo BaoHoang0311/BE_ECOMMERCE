@@ -22,7 +22,7 @@ namespace API.Services
             _mapper = mapper;
         }
 
-        public async Task AddAsync(ProductDtos entity)
+        public async Task<bool> AddAsync(ProductDtos entity)
         {
             var data = await _context.Products.FirstOrDefaultAsync(m => m.FullName == entity.FullName);
             if (data == null)
@@ -39,12 +39,14 @@ namespace API.Services
 
                 await _context.Products.AddAsync(pro);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
 
-        public async Task UpdateAsync(string id, ProductDtos entity)
+        public async Task<bool> UpdateAsync(ProductDtos entity)
         {
-            var data = await _context.Products.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            var data = await _context.Products.AsNoTracking().FirstOrDefaultAsync(m => m.Id == entity.Id);
             if(data != null)
             {
                 var pro = _mapper.Map<Product>(entity);
@@ -57,7 +59,9 @@ namespace API.Services
 
                 _context.Products.Update(pro);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
     }
 }

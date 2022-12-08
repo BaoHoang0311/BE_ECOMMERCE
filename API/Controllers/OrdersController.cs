@@ -4,7 +4,9 @@ using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -20,14 +22,20 @@ namespace API.Controllers
             _orderRepository = services;
             _mapper = mapper;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetOrder()
+        {
+            var list = await _orderRepository.GetQuery().Include(m=>m.OrderDetails).ToListAsync();
+            return Ok(list);
+        }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrderbyIdCus(string id)
+        public async Task<IActionResult> GetOrderbyOrderId (string id)
         {
             try
             {
-                var listOrder = await _orderRepository.GetOrderbyIdCus(id);
+                var listOrder = await _orderRepository.GetOrderbyOrderId(id);
 
                 return Ok(
                     new
@@ -55,8 +63,9 @@ namespace API.Controllers
             }
 
         }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrderbyIdCus(string id)
+        public async Task<IActionResult> DeleteOrderbyOrderId (string id)
         {
             try
             {
@@ -65,14 +74,21 @@ namespace API.Controllers
                 return Ok(
                     new
                     {
-                        message = "DeleteOrderbyIdCus thanh cong",
+                        message = "DeleteOrderbyOrderId  thanh cong",
                     });
-
             }
             catch
             {
                 return BadRequest();
             }
+        }
+        [HttpPut]
+        public async Task<bool> Update(OrderDtos Order) 
+        {
+            var check = await _orderRepository.UpdateOrder(Order);
+            if(check==true)
+                return true;
+            return false;
         }
     }
 }

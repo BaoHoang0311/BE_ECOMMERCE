@@ -49,8 +49,6 @@ namespace API.Controllers
 
             var dulieu = await _customerRepository.GetByIdAsync(id);
 
-
-
             if (dulieu == null) return NotFound();
             var dulieu_map = dulieu;
 
@@ -61,72 +59,25 @@ namespace API.Controllers
             });
         }
 
-        //[HttpGet("name")]
-        //public async Task<IActionResult> GetCustomersByName(string name)
-        //{
-        //    var dulieu = await _customerRepository.GetByNameAsync(name);
-        //    if (dulieu == null) return NotFound();
-        //    var dulieu_map = dulieu;
-
-        //    return Ok(new
-        //    {
-        //        message = "GetCustomersByName thanh cong",
-        //        data = dulieu_map
-        //    });
-        //}
-
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomrer(string id)
         {
-            try
-            {
-                await _customerRepository.DeleteAsync(id);
-                return Ok(
-                    new
-                    {
-                        message = "Delete Successfull"
-                    });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            await _customerRepository.DeleteAsync(id);
+            return Ok(new { message = "xoa thanh cong" });
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCustomrer(CustomerDtos customerdtos)
+        public async Task<bool> CreateCustomrer(CustomerDtos customerdtos)
         {
-            try
-            {
-                await _customerRepository.AddAsync(customerdtos);
-                return Ok(
-                    new
-                    {
-                        tt = "Create Successfull"
-                    });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+
+            var check = await _customerRepository.AddAsync(customerdtos);
+            return check;
         }
         [HttpPut]
         //https://localhost:44381/api/Customers?id=21862dcd-b42c-4468-9b8d-f86d9f5fcc6f
-        public async Task<IActionResult> UpdateProduct(string id, CustomerDtos customersDtos)
+        public async Task<bool> UpdateProduct(CustomerDtos customersDtos)
         {
-            try
-            {
-                await _customerRepository.UpdateAsync(id, customersDtos);
-                return Ok(
-                    new
-                    {
-                        tt = "Update Successfull"
-                    });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var check = await _customerRepository.UpdateAsync(customersDtos);
+            return check;
         }
     }
 }

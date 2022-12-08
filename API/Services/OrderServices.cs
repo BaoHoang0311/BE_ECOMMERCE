@@ -13,20 +13,20 @@ using System.Xml.Linq;
 
 namespace API.Services
 {
-    public class OrderServices : IOrderRepository
+    public class OrderServices : EntityBaseRepository<Order>, IOrderRepository
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
-        public OrderServices(MyDbContext context, IMapper mapper)
+        public OrderServices(MyDbContext context, IMapper mapper) : base(context, mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task AddOrderAsync(OrderDtos orderDtos)
+        public async Task<bool> AddOrderAsync(OrderDtos orderDtos)
         {
-            var cus = await  _context.Customers.FirstOrDefaultAsync(o=>o.Id ==orderDtos.CustomerId);
-            if(cus!= null)
+            var cus = await _context.Customers.FirstOrDefaultAsync(o => o.Id == orderDtos.CustomerId);
+            if (cus != null)
             {
                 var order = _mapper.Map<Order>(orderDtos);
                 order.Id = Guid.NewGuid().ToString();
@@ -36,11 +36,8 @@ namespace API.Services
                 order.ModifiedDate = DateTime.Now;
                 order.ModifiedBy = "admin";
 
-                order.TotalPrice = 0;
-                if (orderDtos.orderDetailDtos.Count > 0)
-                {
-                    order.TotalPrice = orderDtos.orderDetailDtos.Aggregate(order.TotalPrice, (a, b) => a + (b.Price * b.ProductAmmount));
-                }
+                order.TotalPrice = TotalPrice(orderDtos.orderDetailDtos);
+
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
 
@@ -70,41 +67,66 @@ namespace API.Services
                         }
                     }
                 }
+                return true;
             }
             else
             {
-
+                return false;
             }
-
         }
-
-        public async Task DeleteAsync(string id)
+        private decimal TotalPrice(List<OrderDetailDtos> orderDetailDtos)
         {
-            var data = await _context.Orders.FirstOrDefaultAsync(x => x.CustomerId == id);
-            if (data != null)
+            decimal res = 0;
+            if (orderDetailDtos.Count > 0)
             {
-                _context.Remove(data);
-                await _context.SaveChangesAsync();
-            }
-
-        }
-
-        public async Task<IList<Order>> GetOrderbyIdCus(string CusId)
-        {
-            var cus = await _context.Customers.FirstOrDefaultAsync(x => x.Id == CusId);
-            if(cus!= null)
-            {
-                var listorder = await _context.Orders.Include(o => o.OrderDetails).ThenInclude(o=>o.Product)
-                                                    .ToListAsync();
-
-                if (listorder != null)
+                foreach (var item in orderDetailDtos)
                 {
-                    listorder = listorder.Where(x => x.CustomerId == CusId).ToList();
+                    if (checkammount(item) == true)
+                    {
+                        res += item.ProductAmmount * item.Price;
+                    }
                 }
+            }
+            return res;
+        }
+
+        public async Task<IList<Order>> GetOrderbyOrderId(string OrderId)
+        {
+            var listorder = await _context.Orders.Include(o => o.OrderDetails).ThenInclude(o => o.Product)
+                                                .ToListAsync();
+
+            if (listorder != null)
+            {
+                listorder = listorder.Where(x => x.Id == OrderId).ToList();
                 return listorder;
             }
+
             return null;
         }
+
+        public async Task<bool> UpdateOrder(OrderDtos orderDtos)
+        {
+            var data = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderDtos.OrderId);
+
+            if (data != null)
+            {
+                var order = _mapper.Map<Order>(orderDtos);
+
+                //order.TotalPrice = TotalPrice(orderDtos.orderDetailDtos);
+                data.OrderNo = order.OrderNo;
+                data.ModifiedDate = DateTime.Now;
+                data.CustomerId = order.CustomerId;
+
+                _context.Orders.Update(data);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+
+        }
+
+
+
         private bool checkammount(OrderDetailDtos orderDetail)
         {
             var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId);
@@ -116,14 +138,13 @@ namespace API.Services
             return false;
         }
 
-
         private bool UpdateAmmount(OrderDetailDtos orderDetailDtos)
         {
             var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetailDtos.ProductId);
 
             if (sp != null)
             {
-                sp.Amount =sp.Amount - orderDetailDtos.ProductAmmount;
+                sp.Amount = sp.Amount - orderDetailDtos.ProductAmmount;
 
                 _context.Products.Attach(sp);
                 _context.Entry(sp).Property(x => x.Amount).IsModified = true;

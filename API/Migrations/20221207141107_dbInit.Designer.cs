@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20221207071728_dbInit")]
+    [Migration("20221207141107_dbInit")]
     partial class dbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,6 @@ namespace API.Migrations
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");

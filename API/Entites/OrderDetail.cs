@@ -1,11 +1,12 @@
-﻿using System;
+﻿using API.Repository;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace API.Entites
 {
-    public class OrderDetail
+    public class OrderDetail :IEntityID
     {
         [Key]
         public string Id { get; set; }

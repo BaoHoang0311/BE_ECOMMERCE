@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Repository
@@ -8,14 +9,9 @@ namespace API.Repository
     {
         Task<T> GetByIdAsync(string id);
         Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByNameAsync(string name);
+        IQueryable<T> GetQuery();
 
-
-        Task AddAsync(T entity);
-        Task UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);
-
-
     }
 
 }

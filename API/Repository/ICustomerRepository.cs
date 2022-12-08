@@ -6,7 +6,7 @@ namespace API.Repository
 {
     public interface ICustomerRepository : IEntityBaseRepository<Customer>
     {
-        Task AddAsync(CustomerDtos entity);
-        Task UpdateAsync(string id, CustomerDtos entity);
+        Task<bool> AddAsync(CustomerDtos entity);
+        Task<bool> UpdateAsync(CustomerDtos entity);
     }
 }

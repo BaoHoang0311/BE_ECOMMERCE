@@ -9,7 +9,6 @@ namespace API.Repository
     public interface IEntityID
     {
         string Id { get; set; }
-        string FullName { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

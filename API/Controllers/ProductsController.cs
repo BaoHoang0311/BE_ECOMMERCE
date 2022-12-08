@@ -49,17 +49,15 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductsById(string id)
         {
-            //var spec = new Productwith_Include_Condition(id);
-            //var dulieu = await _productRepository.GetEntityWithSpec(spec);
 
             var dulieu = await _productRepository.GetByIdAsync(id);
 
-            
+
 
             if (dulieu == null) return NotFound();
             var dulieu_map = _mapper.Map<Product>(dulieu);
 
-            return Ok(new 
+            return Ok(new
             {
                 message = "GetProductsBy Idthanh cong",
                 data = dulieu_map
@@ -82,58 +80,29 @@ namespace API.Controllers
         //}
 
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+
+
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductDtos productVM)
+        public async Task<bool> CreateProduct(ProductDtos productVM)
         {
-            try
-            {
-                await _productRepository.AddAsync(productVM);
-                return Ok(
-                    new
-                    {
-                        tt = "Create Successfull"
-                    });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var check = await _productRepository.AddAsync(productVM);
+            return check;
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         //https://localhost:44381/api/Products?id=9dc0c168-a572-4269-b401-31c889158d35
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(string id, ProductDtos productsDtos)
+        public async Task<bool> UpdateProduct(ProductDtos productsDtos)
         {
-            try
-            {
-                await _productRepository.UpdateAsync(id, productsDtos);
-                return Ok(
-                    new
-                    {
-                        tt = "Update Successfull"
-                    });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var check = await _productRepository.UpdateAsync(productsDtos);
+            return check;
+
         }
         [HttpDelete]
+        //https://localhost:44381/api/Orders/45a1bf78-aa7f-4434-90d3-ce033c71face
         public async Task<IActionResult> DeleteProduct(string id)
         {
-            try
-            {
-                await _productRepository.DeleteAsync(id);
-                return Ok(
-                    new
-                    {
-                        message = "Delete Successfull"
-                    });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            await _productRepository.DeleteAsync(id);
+            return Ok(new { message = "xoa thanh cong" });
         }
     }
 }

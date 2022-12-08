@@ -3,17 +3,17 @@ using API.Dtos;
 using API.Entites;
 using API.Services;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Repository
 {
-    public interface IOrderRepository 
+    public interface IOrderRepository : IEntityBaseRepository<Order>
     {
-        Task AddOrderAsync(OrderDtos orderDtos);
-        Task<IList<Order>> GetOrderbyIdCus(string CusId);
+        Task<bool> AddOrderAsync(OrderDtos orderDtos);
+        Task<IList<Order>> GetOrderbyOrderId(string CusId);
 
-        Task DeleteAsync(string id);
-
+        Task<bool> UpdateOrder(OrderDtos orderDtos);
     }
 }

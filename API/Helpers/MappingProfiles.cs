@@ -10,12 +10,14 @@ namespace API.Helpers
         public MappingProfiles()
         {
             CreateMap<ProductDtos,Product>()
+                .ForMember(d=>d.Id,o=>o.MapFrom(s=>s.Id))
                 .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName))
                 .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount));
 
             CreateMap<CustomerDtos, Customer>();
 
             CreateMap<OrderDtos, Order>()
+                .ForMember(d=>d.Id , o=> o.MapFrom(s=>s.OrderId))
                 .ForMember(d => d.OrderNo, o => o.MapFrom(s => s.OrderNo))
                 .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId));
 

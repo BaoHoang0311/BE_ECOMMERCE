@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entites
 {
-    public class Order
+    public class Order : IEntityID
     {
         public Order()
         {

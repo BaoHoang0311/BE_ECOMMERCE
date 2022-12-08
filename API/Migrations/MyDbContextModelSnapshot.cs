@@ -48,9 +48,6 @@ namespace API.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
