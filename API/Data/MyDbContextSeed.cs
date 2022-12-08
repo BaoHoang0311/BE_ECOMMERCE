@@ -39,7 +39,7 @@ namespace API.Data
                     
                     foreach (var item in products)
                     {
-                        item.Id = Guid.NewGuid().ToString();
+                        //item.Id = Guid.NewGuid().ToString();
                         item.CreatedDate = DateTime.Now;
                         item.ModifiedDate = DateTime.Now;
                         context.Products.Add(item);
@@ -54,7 +54,7 @@ namespace API.Data
 
                     foreach (var item in customers)
                     {
-                        item.Id = Guid.NewGuid().ToString();
+                        //item.Id = Guid.NewGuid().ToString();
                         item.CreatedBy = "admin";
                         item.CreatedDate = DateTime.Now;
                         item.ModifiedDate = DateTime.Now;

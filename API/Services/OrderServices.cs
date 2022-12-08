@@ -29,7 +29,6 @@ namespace API.Services
             if (cus != null)
             {
                 var order = _mapper.Map<Order>(orderDtos);
-                order.Id = Guid.NewGuid().ToString();
 
                 order.CreatedBy = "admin";
                 order.CreatedDate = DateTime.Now;
@@ -50,8 +49,6 @@ namespace API.Services
                         if (checkammount(item) == true && UpdateAmmount(item))
                         {
                             var orderDetail = _mapper.Map<OrderDetail>(item);
-
-                            orderDetail.Id = Guid.NewGuid().ToString();
 
                             orderDetail.OrderNo = "";
 
@@ -75,7 +72,7 @@ namespace API.Services
             }
         }
         private decimal TotalPrice(List<OrderDetailDtos> orderDetailDtos)
-        {
+        { 
             decimal res = 0;
             if (orderDetailDtos.Count > 0)
             {
@@ -90,7 +87,7 @@ namespace API.Services
             return res;
         }
 
-        public async Task<IList<Order>> GetOrderbyOrderId(string OrderId)
+        public async Task<IList<Order>> GetOrderbyOrderId(int OrderId)
         {
             var listorder = await _context.Orders.Include(o => o.OrderDetails).ThenInclude(o => o.Product)
                                                 .ToListAsync();
@@ -106,25 +103,24 @@ namespace API.Services
 
         public async Task<bool> UpdateOrder(OrderDtos orderDtos)
         {
-            var data = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderDtos.OrderId);
+            var data = await _context.Orders.AsNoTracking().Include(m => m.OrderDetails).FirstOrDefaultAsync(o => o.Id == orderDtos.OrderId);
+            var order = _mapper.Map<Order>(orderDtos);
 
-            if (data != null)
+            //order.TotalPrice = TotalPrice(orderDtos.orderDetailDtos);
+            order.ModifiedDate = DateTime.Now;
+            order.CreatedDate = data.CreatedDate;
+
+            foreach (var item in order.OrderDetails)
             {
-                var order = _mapper.Map<Order>(orderDtos);
-
-                //order.TotalPrice = TotalPrice(orderDtos.orderDetailDtos);
-                data.OrderNo = order.OrderNo;
-                data.ModifiedDate = DateTime.Now;
-                data.CustomerId = order.CustomerId;
-
-                _context.Orders.Update(data);
-                await _context.SaveChangesAsync();
-                return true;
+                item.TotalPrice = item.price * item.ammount;
+                item.ModifiedDate = DateTime.Now;
+                item.CreatedDate = order.CreatedDate;
             }
-            return false;
 
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+            return true;
         }
-
 
 
         private bool checkammount(OrderDetailDtos orderDetail)

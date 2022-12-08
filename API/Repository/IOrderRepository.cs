@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace API.Repository
 {
-    public interface IOrderRepository : IEntityBaseRepository<Order>
+    public interface IOrderRepository :IEntityBaseRepository<Order>
     {
         Task<bool> AddOrderAsync(OrderDtos orderDtos);
-        Task<IList<Order>> GetOrderbyOrderId(string CusId);
+        Task<IList<Order>> GetOrderbyOrderId(int CusId);
 
         Task<bool> UpdateOrder(OrderDtos orderDtos);
     }

@@ -42,7 +42,7 @@ namespace API.Controllers
 
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomesrsById(string id)
+        public async Task<IActionResult> GetCustomesrsById(int id)
         {
             //var spec = new Productwith_Include_Condition(id);
             //var dulieu = await _productRepository.GetEntityWithSpec(spec);
@@ -60,7 +60,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomrer(string id)
+        public async Task<IActionResult> DeleteCustomrer(int id)
         {
             await _customerRepository.DeleteAsync(id);
             return Ok(new { message = "xoa thanh cong" });

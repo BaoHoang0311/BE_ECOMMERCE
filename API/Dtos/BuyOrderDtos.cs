@@ -1,13 +1,12 @@
-﻿using API.Entites;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace API.Dtos
 {
-    public class OrderDtos
+    public class BuyOrderDtos
     {
         public int OrderId { get; set; }
         public string OrderNo { get; set; }
         public int CustomerId { get; set; }
-        public List<OrderDetailDtos> orderDetailDtos { get; set; }
+        public List<BuyOrderDetailDtos> BuyorderDetailDtos { get; set; }
     }
 }

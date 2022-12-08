@@ -6,10 +6,10 @@ using System.Runtime.CompilerServices;
 
 namespace API.Entites
 {
-    public class OrderDetail :IEntityID
+    public class OrderDetail : IEntityID
     {
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string OrderNo { get; set; }
         public int ammount { get; set; }
@@ -17,11 +17,11 @@ namespace API.Entites
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalPrice { get; set; }
 
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
 
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
 

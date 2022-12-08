@@ -1,37 +1,22 @@
 [
   {
-    "Id": "1",
     "FullName": "Angular",
-    "PictureUrl": "images/products/sb-ang1.png",
-    "Amount": 10,
-    "Price": 200
+    "Amount": 100
   },
   {
-    "Id": "2",
     "FullName": "Reactjs",
-    "PictureUrl": "images/products/sb-ang1.png",
-    "Amount": 10,
-    "Price": 150
+    "Amount": 100
   },
   {
-    "Id": "3",
     "FullName": "Nodejs",
-    "PictureUrl": "images/products/sb-ang1.png",
-    "Amount": 10,
-    "Price": 300
+    "Amount": 100
   },
   {
-    "Id": "4",
     "FullName": "Golang",
-    "PictureUrl": "images/products/sb-ang1.png",
-    "Amount": 40,
-    "Price": 50
+    "Amount": 100
   },
   {
-    "Id": "5",
     "FullName": "Java",
-    "PictureUrl": "images/products/sb-ang1.png",
-    "Amount": 10,
-    "Price": 100
+    "Amount": 100
   }
 ]

@@ -8,7 +8,7 @@ namespace API.Repository
 {
     public interface IEntityID
     {
-        string Id { get; set; }
+        int Id { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

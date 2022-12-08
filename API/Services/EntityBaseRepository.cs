@@ -28,7 +28,7 @@ namespace API.Services
             return data;
         }
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<T> GetByIdAsync(int id)
         {
             var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id == id);
             return data;
@@ -39,7 +39,7 @@ namespace API.Services
             return data;
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(int id)
         {
             var data = await GetByIdAsync(id);
             if(data != null)
