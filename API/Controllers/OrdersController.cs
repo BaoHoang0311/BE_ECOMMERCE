@@ -25,13 +25,13 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrder()
         {
-            var list = await _orderRepository.GetQuery().Include(m=>m.OrderDetails).ToListAsync();
+            var list = await _orderRepository.GetQuery().Include(m => m.OrderDetails).ToListAsync();
             return Ok(list);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrderbyOrderId (string id)
+        public async Task<IActionResult> GetOrderbyOrderId(int id)
         {
             try
             {
@@ -52,24 +52,21 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(OrderDtos orderDtos)
         {
-            try
+            var check = await _orderRepository.AddOrderAsync(orderDtos);
+            if (check == true)
             {
-                await _orderRepository.AddOrderAsync(orderDtos);
-                 return Ok(new {message= "AddOrder thanh cong" });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+                return Ok(new { message = "AddOrder thanh cong" });
 
+            }
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrderbyOrderId (string id)
+        public async Task<IActionResult> DeleteOrderbyOrderId(int id)
         {
             try
             {
-                 await _orderRepository.DeleteAsync(id);
+                await _orderRepository.DeleteAsync(id);
 
                 return Ok(
                     new
@@ -83,10 +80,10 @@ namespace API.Controllers
             }
         }
         [HttpPut]
-        public async Task<bool> Update(OrderDtos Order) 
+        public async Task<bool> Update(OrderDtos Order)
         {
             var check = await _orderRepository.UpdateOrder(Order);
-            if(check==true)
+            if (check == true)
                 return true;
             return false;
         }

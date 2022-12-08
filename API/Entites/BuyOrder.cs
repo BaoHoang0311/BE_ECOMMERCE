@@ -1,16 +1,16 @@
-﻿using API.Repository;
-using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Entites
 {
-    public class Order : IEntityID
+    public class BuyOrder
     {
-        public Order()
+        public BuyOrder()
         {
-            OrderDetails = new();
+            BuyOrderDetails = new();
         }
         [Key]
         public int Id { get; set; }
@@ -32,7 +32,6 @@ namespace API.Entites
         public Customer customer { get; set; }
 
 
-
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<BuyOrderDetail> BuyOrderDetails { get; set; }
     }
 }

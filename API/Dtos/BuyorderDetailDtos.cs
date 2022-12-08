@@ -1,6 +1,6 @@
 ﻿namespace API.Dtos
 {
-    public class OrderDetailDtos
+    public class BuyOrderDetailDtos
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

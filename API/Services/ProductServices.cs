@@ -28,7 +28,7 @@ namespace API.Services
             if (data == null)
             {
                 var pro = _mapper.Map<Product>(entity);
-                pro.Id = Guid.NewGuid().ToString();
+
                 pro.productOwner = "";
 
                 pro.CreatedBy = "";
@@ -46,18 +46,14 @@ namespace API.Services
 
         public async Task<bool> UpdateAsync(ProductDtos entity)
         {
-            var data = await _context.Products.AsNoTracking().FirstOrDefaultAsync(m => m.Id == entity.Id);
+            var data = await _context.Products.FirstOrDefaultAsync(m => m.Id == entity.Id);
             if(data != null)
             {
-                var pro = _mapper.Map<Product>(entity);
-                pro.Id = data.Id;
-                pro.productOwner = "";
-                pro.CreatedDate = data.CreatedDate;
-                pro.ModifiedDate = DateTime.Now;
-                pro.ModifiedBy = "";
+                data.ModifiedDate = DateTime.Now;
+                data.FullName = entity.FullName;
+                data.Amount = entity.Amount;
 
-
-                _context.Products.Update(pro);
+                _context.Products.Update(data);
                 await _context.SaveChangesAsync();
                 return true;
             }

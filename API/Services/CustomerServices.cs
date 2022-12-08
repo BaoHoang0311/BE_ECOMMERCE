@@ -25,7 +25,7 @@ namespace API.Services
             if (data == null)
             {
                 var pro = _mapper.Map<Customer>(entity);
-                pro.Id = Guid.NewGuid().ToString();
+
                 pro.FullName = entity.FullName;
                 pro.Email= entity.Email;
 
@@ -43,18 +43,13 @@ namespace API.Services
 
         public async Task<bool> UpdateAsync( CustomerDtos entity)
         {
-            var data = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.Id == entity.Id);
+            var data = await _context.Customers.FirstOrDefaultAsync(m => m.Id == entity.Id);
             if (data != null)
             {
-                var pro = _mapper.Map<Customer>(entity);
-                
-                pro.CreatedBy =data.CreatedBy;
-                pro.CreatedDate = data.CreatedDate;
-                pro.ModifiedDate = DateTime.Now;
-                pro.ModifiedBy = "";
+                data.ModifiedDate = DateTime.Now;
+                data.FullName = entity.FullName;
 
-
-                _context.Customers.Update(pro);
+                _context.Customers.Update(data);
                 await _context.SaveChangesAsync();
                 return true;
             }

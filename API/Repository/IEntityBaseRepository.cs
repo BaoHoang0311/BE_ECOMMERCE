@@ -7,11 +7,12 @@ namespace API.Repository
 {
     public interface IEntityBaseRepository<T> where T: class,  new()
     {
-        Task<T> GetByIdAsync(string id);
+        Task<T> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
         IQueryable<T> GetQuery();
 
-        Task DeleteAsync(string id);
+        Task DeleteAsync(int id);
+
     }
 
 }

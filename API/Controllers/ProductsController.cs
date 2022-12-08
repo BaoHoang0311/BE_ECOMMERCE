@@ -47,7 +47,7 @@ namespace API.Controllers
         }
         // api/Products/36a8b2df-749b-4eb8-a654-b37c5fa65181
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductsById(string id)
+        public async Task<IActionResult> GetProductsById(int id)
         {
 
             var dulieu = await _productRepository.GetByIdAsync(id);
@@ -65,26 +65,12 @@ namespace API.Controllers
         }
 
         // api/Products/name?name=36a8b2df-749b-4eb8-a654-b37c5fa65181
-        //[HttpGet("name")]
-        //public async Task<IActionResult> GetProductByName(string name)
-        //{
-        //    var dulieu = await _productRepository.GetByNameAsync(name);
-        //    if (dulieu == null) return NotFound();
-        //    var dulieu_map = dulieu;
-
-        //    return Ok(new
-        //    {
-        //        message = " GetProductByName thanh cong",
-        //        data = dulieu_map
-        //    });
-        //}
 
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
-
-
         [HttpPost]
         public async Task<bool> CreateProduct(ProductDtos productVM)
         {
+
             var check = await _productRepository.AddAsync(productVM);
             return check;
         }
@@ -95,11 +81,10 @@ namespace API.Controllers
         {
             var check = await _productRepository.UpdateAsync(productsDtos);
             return check;
-
         }
         [HttpDelete]
         //https://localhost:44381/api/Orders/45a1bf78-aa7f-4434-90d3-ce033c71face
-        public async Task<IActionResult> DeleteProduct(string id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productRepository.DeleteAsync(id);
             return Ok(new { message = "xoa thanh cong" });

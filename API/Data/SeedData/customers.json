@@ -1,41 +1,31 @@
 [
   {
-    "Id": "1",
     "FullName": "User1",
     "Email": "User1@gmail.com",
-    "Password": "1234",
     "Phone": "12345",
     "Address": "User1_Address"
   },
   {
-    "Id": "2",
     "FullName": "User2",
     "Email": "User1@gmail.com",
-    "Password": "1234",
     "Phone": "12346",
     "Address": "User2_Address"
   },
   {
-    "Id": "3",
     "FullName": "User3",
     "Email": "User3@gmail.com",
-    "Password": "1234",
     "Phone": "12347",
     "Address": "User3_Address"
   },
   {
-    "Id": "4",
     "FullName": "User4",
     "Email": "User4@gmail.com",
-    "Password": "1234",
     "Phone": "12348",
     "Address": "User4_Address"
   },
   {
-    "Id": "5",
     "FullName": "User5",
     "Email": "User5@gmail.com",
-    "Password": "1234",
     "Phone": "12349",
     "Address": "User5_Address"
   }
