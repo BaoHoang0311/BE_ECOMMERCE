@@ -24,7 +24,5 @@ namespace API.Entites
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
-        //public List<OrderDetail> orderDetails { get; set; }
-
     }
 }

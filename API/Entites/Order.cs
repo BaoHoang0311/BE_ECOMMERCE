@@ -8,18 +8,14 @@ namespace API.Entites
 {
     public class Order : IEntityID
     {
-        public Order()
-        {
-            OrderDetails = new();
-        }
+
         [Key]
         public int Id { get; set; }
 
         public string OrderNo { get; set; }
+
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalPrice { get; set; }
-
-
 
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -31,7 +27,10 @@ namespace API.Entites
         [ForeignKey("CustomerId")]
         public Customer customer { get; set; }
 
-
+        public Order()
+        {
+            OrderDetails = new();
+        }
 
         public List<OrderDetail> OrderDetails { get; set; }
     }

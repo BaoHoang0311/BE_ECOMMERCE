@@ -11,49 +11,10 @@ namespace API.Services
 {
     public class CustomerServices : EntityBaseRepository<Customer>, ICustomerRepository
     {
-        private readonly MyDbContext _context;
-        private readonly IMapper _mapper;
-        public CustomerServices(MyDbContext context, IMapper mapper) : base(context,mapper)
+        public CustomerServices(MyDbContext context) : base(context)
         {
-            _context = context;
-            _mapper = mapper;
-        }
 
-        public async Task<bool> AddAsync(CustomerDtos entity)
-        {
-            var data = await _context.Customers.FirstOrDefaultAsync(m => m.FullName == entity.FullName);
-            if (data == null)
-            {
-                var pro = _mapper.Map<Customer>(entity);
-
-                pro.FullName = entity.FullName;
-                pro.Email= entity.Email;
-
-                pro.CreatedBy = "";
-                pro.CreatedDate = DateTime.Now;
-                pro.ModifiedDate = DateTime.Now;
-                pro.ModifiedBy = "";
-
-                await _context.Customers.AddAsync(pro);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
-        }
-
-        public async Task<bool> UpdateAsync( CustomerDtos entity)
-        {
-            var data = await _context.Customers.FirstOrDefaultAsync(m => m.Id == entity.Id);
-            if (data != null)
-            {
-                data.ModifiedDate = DateTime.Now;
-                data.FullName = entity.FullName;
-
-                _context.Customers.Update(data);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
         }
     }
 }
+

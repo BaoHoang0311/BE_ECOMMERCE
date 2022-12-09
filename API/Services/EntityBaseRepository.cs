@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Dtos;
 using API.Entites;
 using API.Repository;
 using AutoMapper;
@@ -13,14 +14,12 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID , new()
+    public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID, new()
     {
         private readonly MyDbContext _context;
-        private readonly IMapper _mapper; 
-        public EntityBaseRepository(MyDbContext context, IMapper mapper)
+        public EntityBaseRepository(MyDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -35,19 +34,40 @@ namespace API.Services
         }
         public IQueryable<T> GetQuery()
         {
-            var data =  _context.Set<T>().AsQueryable();
+            var data = _context.Set<T>().AsQueryable();
             return data;
         }
 
         public async Task DeleteAsync(int id)
         {
             var data = await GetByIdAsync(id);
-            if(data != null)
+            if (data != null)
             {
                 _context.Remove(data);
                 await _context.SaveChangesAsync();
             }
         }
 
+        public async Task AddAsync(T entity)
+        {
+        
+            entity.CreatedBy = "";
+            entity.CreatedDate = DateTime.Now;
+            entity.ModifiedDate = DateTime.Now;
+            entity.ModifiedBy = "";
+
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+
+            entity.ModifiedDate = DateTime.Now;
+           
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
+
+        }
     }
 }

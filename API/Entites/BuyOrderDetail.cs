@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using System.ComponentModel.DataAnnotations;
+using API.Repository;
 
 namespace API.Entites
 {
-    public class BuyOrderDetail
+    public class BuyOrderDetail : IEntityID
     {
         [Key]
         public int Id { get; set; }
@@ -16,9 +17,9 @@ namespace API.Entites
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalPrice { get; set; }
 
-        public int OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public int BuyOrderId { get; set; }
+        [ForeignKey("BuyOrderId")]
+        public BuyOrder BuyOrder { get; set; }
 
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]

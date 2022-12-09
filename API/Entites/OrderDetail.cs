@@ -17,9 +17,9 @@ namespace API.Entites
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalPrice { get; set; }
 
-        public int OrderId { get; set; }
+        public int OrderId { get; set; } 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public  Order Order { get; set; }
 
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]

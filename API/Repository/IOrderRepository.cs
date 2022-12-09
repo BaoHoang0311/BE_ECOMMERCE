@@ -12,7 +12,8 @@ namespace API.Repository
     public interface IOrderRepository :IEntityBaseRepository<Order>
     {
         Task<bool> AddOrderAsync(OrderDtos orderDtos);
-        Task<IList<Order>> GetOrderbyOrderId(int CusId);
+
+        Task<IList<Order>> GetOrderbyOrderId(int OrderId);
 
         Task<bool> UpdateOrder(OrderDtos orderDtos);
     }

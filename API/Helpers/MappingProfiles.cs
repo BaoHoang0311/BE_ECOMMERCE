@@ -9,18 +9,13 @@ namespace API.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<ProductDtos, Product>()
-                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName))
-                .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount));
+            CreateMap<ProductDtos, Product>().ReverseMap();
 
-            CreateMap<CustomerDtos, Customer>()
-                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName));
+            CreateMap<CustomerDtos, Customer>().ReverseMap();
 
 
             CreateMap<OrderDtos, Order>()
-                .ForMember(d => d.Id, o => o.MapFrom(s=>s.OrderId))
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.OrderId))
                 .ForMember(d => d.OrderDetails, o => o.MapFrom(s => s.orderDetailDtos)).ReverseMap();
 
             CreateMap<OrderDetailDtos, OrderDetail>()
@@ -29,7 +24,7 @@ namespace API.Helpers
                 .ForMember(d => d.price, o => o.MapFrom(s => s.Price));
 
             CreateMap<BuyOrderDtos, BuyOrder>()
-                .ForMember(d => d.Id, o => o.MapFrom(s => s.OrderId))
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.BuyOrderId))
                 .ForMember(d => d.BuyOrderDetails , o => o.MapFrom(s => s.BuyorderDetailDtos)).ReverseMap();
 
         }

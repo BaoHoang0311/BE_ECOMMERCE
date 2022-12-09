@@ -4,6 +4,7 @@ using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,11 +24,6 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCustomers()
         {
-            #region Include
-            // dulieu = _product.Where(condition).Include ( a => a.b).Include (a=>a.c)
-            //var spec = new Productwith_Include_Condition();
-            //var dulieu = await _productRepository.ListAsync(spec);
-            #endregion
 
             var dulieu = await _customerRepository.GetAllAsync();
 
@@ -44,9 +40,6 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomesrsById(int id)
         {
-            //var spec = new Productwith_Include_Condition(id);
-            //var dulieu = await _productRepository.GetEntityWithSpec(spec);
-
             var dulieu = await _customerRepository.GetByIdAsync(id);
 
             if (dulieu == null) return NotFound();
@@ -68,16 +61,28 @@ namespace API.Controllers
         [HttpPost]
         public async Task<bool> CreateCustomrer(CustomerDtos customerdtos)
         {
-
-            var check = await _customerRepository.AddAsync(customerdtos);
-            return check;
+            var data = await _customerRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == customerdtos.FullName);
+            if(data== null)
+            {
+                var cus = _mapper.Map<Customer>(customerdtos);
+                await _customerRepository.AddAsync(cus);
+                return true;
+            }
+            return false;
         }
         [HttpPut]
         //https://localhost:44381/api/Customers?id=21862dcd-b42c-4468-9b8d-f86d9f5fcc6f
-        public async Task<bool> UpdateProduct(CustomerDtos customersDtos)
+        public async Task<bool> UpdateCustomer(Customer customer)
         {
-            var check = await _customerRepository.UpdateAsync(customersDtos);
-            return check;
+            var data = await _customerRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == customer.Id);
+            if (data != null)
+            {
+                //data = _mapper.Map<Customer>(customerdtos);
+                
+                await _customerRepository.UpdateAsync(customer);
+                return true;
+            }
+            return false;
         }
     }
 }

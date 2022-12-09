@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using API.Dtos;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace API.Repository
 
         Task DeleteAsync(int id);
 
+        Task AddAsync(T entity);
+
+        Task UpdateAsync(T entity);
     }
 
 }

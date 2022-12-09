@@ -25,6 +25,7 @@ namespace API
             var services = builder.Services;
             services.AddDbContext<MyDbContext>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("MyDb")));
+
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,15 +36,12 @@ namespace API
             services.AddScoped<IProductRepository, ProductServices>();
             services.AddScoped<ICustomerRepository,CustomerServices>();
             services.AddScoped<IOrderRepository, OrderServices>();
-
-
-            services.AddScoped(typeof(IEntityBaseRepository<>),typeof(EntityBaseRepository<>) );
-
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+
             // Configure the HTTP request pipeline.
             var app = builder.Build();
             if (app.Environment.IsDevelopment())

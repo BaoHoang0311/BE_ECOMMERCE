@@ -9,11 +9,8 @@ namespace API.Dtos
 {
     public class ProductDtos
     {
-        [Required]
         public int Id { get; set; }
-        [Required]
         public string FullName { get; set; }
-        [Required]
         public int Amount { get; set; }
 
     }

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using NuGet.Versioning;
 
 namespace API.Services
 {
@@ -17,11 +18,16 @@ namespace API.Services
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
-        public OrderServices(MyDbContext context, IMapper mapper) : base(context, mapper)
+
+        public OrderServices(MyDbContext context, IMapper mapper)
+            : base(context)
         {
             _context = context;
             _mapper = mapper;
         }
+
+  
+
 
         public async Task<bool> AddOrderAsync(OrderDtos orderDtos)
         {
@@ -35,57 +41,92 @@ namespace API.Services
                 order.ModifiedDate = DateTime.Now;
                 order.ModifiedBy = "admin";
 
-                order.TotalPrice = TotalPrice(orderDtos.orderDetailDtos);
+                order.TotalPrice = TotalPrice(order.OrderDetails);
 
-                _context.Orders.Add(order);
-                await _context.SaveChangesAsync();
+                decimal zzz = 0;
 
-
-
-                if (orderDtos.orderDetailDtos.Count > 0)
+                if (order.TotalPrice > 0)
                 {
-                    foreach (var item in orderDtos.orderDetailDtos)
+                    var list = order.OrderDetails;
+                    order.OrderDetails = null;
+                    
+                    await _context.Orders.AddAsync(order);
+                    await _context.SaveChangesAsync();
+
+
+                    if (list.Count > 0)
                     {
-                        if (checkammount(item) == true && UpdateAmmount(item))
+                        foreach (var item in list)
                         {
-                            var orderDetail = _mapper.Map<OrderDetail>(item);
+                            if ( checkammount(item) == true && UpdateAmmount(item) )
+                            {
+                                var orderDetail = _mapper.Map<OrderDetail>(item);
 
-                            orderDetail.OrderNo = "";
+                                orderDetail.OrderNo = "";
 
-                            orderDetail.CreatedBy = "";
-                            orderDetail.CreatedDate = DateTime.Now;
-                            orderDetail.ModifiedDate = DateTime.Now;
-                            orderDetail.OrderId = order.Id;
+                                orderDetail.CreatedBy = "";
+                                orderDetail.CreatedDate = DateTime.Now;
+                                orderDetail.ModifiedDate = DateTime.Now;
+                                orderDetail.OrderId = order.Id;
 
-                            orderDetail.TotalPrice = item.Price * item.ProductAmmount;
+                                orderDetail.TotalPrice = item.price * item.ammount;
 
-                            _context.OrderDetails.Add(orderDetail);
-                            await _context.SaveChangesAsync();
+                                await _context.OrderDetails.AddAsync(orderDetail);
+
+                            }
                         }
+                        await _context.SaveChangesAsync();
                     }
+                    return true;
                 }
-                return true;
-            }
-            else
-            {
                 return false;
             }
+            return false;
         }
-        private decimal TotalPrice(List<OrderDetailDtos> orderDetailDtos)
-        { 
+
+        private decimal TotalPrice(List<OrderDetail> orderDetail)
+        {
             decimal res = 0;
-            if (orderDetailDtos.Count > 0)
+            if (orderDetail.Count > 0)
             {
-                foreach (var item in orderDetailDtos)
+                foreach (var item in orderDetail)
                 {
                     if (checkammount(item) == true)
                     {
-                        res += item.ProductAmmount * item.Price;
+                        res += item.ammount * item.price;
                     }
                 }
             }
             return res;
         }
+        private bool checkammount(OrderDetail orderDetail)
+        {
+            var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId );
+
+            if (sp != null && sp.Amount >= orderDetail.ammount)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool UpdateAmmount(OrderDetail orderDetail)
+        {
+            var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId);
+
+            if (sp != null)
+            {
+                sp.Amount = sp.Amount - orderDetail.ammount;
+
+                _context.Products.Attach(sp);
+                _context.Entry(sp).Property(x => x.Amount).IsModified = true;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+
 
         public async Task<IList<Order>> GetOrderbyOrderId(int OrderId)
         {
@@ -123,31 +164,9 @@ namespace API.Services
         }
 
 
-        private bool checkammount(OrderDetailDtos orderDetail)
-        {
-            var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId);
 
-            if (sp != null && sp.Amount >= orderDetail.ProductAmmount)
-            {
-                return true;
-            }
-            return false;
-        }
 
-        private bool UpdateAmmount(OrderDetailDtos orderDetailDtos)
-        {
-            var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetailDtos.ProductId);
 
-            if (sp != null)
-            {
-                sp.Amount = sp.Amount - orderDetailDtos.ProductAmmount;
 
-                _context.Products.Attach(sp);
-                _context.Entry(sp).Property(x => x.Amount).IsModified = true;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
     }
 }

@@ -22,12 +22,12 @@ namespace API.Controllers
             _orderRepository = services;
             _mapper = mapper;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetOrder()
-        {
-            var list = await _orderRepository.GetQuery().Include(m => m.OrderDetails).ToListAsync();
-            return Ok(list);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetOrder()
+        //{
+        //    var list = await _orderRepository.GetQuery().Include(m => m.OrderDetails).ToListAsync();
+        //    return Ok(list);
+        //}
 
 
         [HttpGet("{id}")]
@@ -60,7 +60,6 @@ namespace API.Controllers
             }
             return BadRequest();
         }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrderbyOrderId(int id)
         {

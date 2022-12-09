@@ -68,20 +68,32 @@ namespace API.Controllers
 
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         [HttpPost]
-        public async Task<bool> CreateProduct(ProductDtos productVM)
+        public async Task<bool> CreateProduct(ProductDtos productDtos )
         {
-
-            var check = await _productRepository.AddAsync(productVM);
-            return check;
+            // ko nhap vao id
+            var data = await _productRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == productDtos.FullName);
+            if (data == null)
+            {
+                var cus = _mapper.Map<Product>(productDtos);
+                await _productRepository.AddAsync(cus);
+                return true;
+            }
+            return false;
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         //https://localhost:44381/api/Products?id=9dc0c168-a572-4269-b401-31c889158d35
         [HttpPut]
-        public async Task<bool> UpdateProduct(ProductDtos productsDtos)
+        public async Task<bool> UpdateProduct(Product product)
         {
-            var check = await _productRepository.UpdateAsync(productsDtos);
-            return check;
+            var data = await _productRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == product.Id);
+            if (data != null)
+            {
+                await _productRepository.UpdateAsync(product);
+                return true;
+            }
+            return false;
         }
+
         [HttpDelete]
         //https://localhost:44381/api/Orders/45a1bf78-aa7f-4434-90d3-ce033c71face
         public async Task<IActionResult> DeleteProduct(int id)
