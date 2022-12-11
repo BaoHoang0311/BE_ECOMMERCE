@@ -10,5 +10,6 @@ namespace API.Repository
 {
     public interface IProductRepository : IEntityBaseRepository<Product>
     {
+        IEnumerable<Product> GetAllAsyncSearchandPaging(IEnumerable<Product> source, string searchString ,int? pageNumber, int pageSize);
     }
 }

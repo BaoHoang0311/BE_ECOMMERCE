@@ -8,6 +8,7 @@ namespace API.Dtos
         public int OrderId { get; set; }
         public string OrderNo { get; set; }
         public int CustomerId { get; set; }
+        public decimal TotalPrice { get; set; }
         public List<OrderDetailDtos> orderDetailDtos { get; set; }
     }
 }

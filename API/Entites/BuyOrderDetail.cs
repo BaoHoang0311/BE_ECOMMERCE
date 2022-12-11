@@ -6,7 +6,7 @@ using API.Repository;
 
 namespace API.Entites
 {
-    public class BuyOrderDetail : IEntityID
+    public class BuyOrderDetail :  IEntityID
     {
         [Key]
         public int Id { get; set; }

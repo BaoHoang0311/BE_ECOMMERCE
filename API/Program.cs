@@ -33,9 +33,17 @@ namespace API
             services.AddSwaggerGen();
 
             services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
+
             services.AddScoped<IProductRepository, ProductServices>();
             services.AddScoped<ICustomerRepository,CustomerServices>();
+
             services.AddScoped<IOrderRepository, OrderServices>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailServices>();
+
+            services.AddScoped<IBuyOrderRepository, BuyOrderServices>();
+            services.AddScoped<IBuyOrderDetailRepository, BuyOrderDetailServices>();
+
+
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -49,6 +57,7 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
 
             app.UseHttpsRedirection();
 

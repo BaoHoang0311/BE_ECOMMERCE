@@ -1,9 +1,11 @@
 ﻿using API.Data;
 using API.Dtos;
 using API.Entites;
+using API.Helpers;
 using API.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,5 +71,25 @@ namespace API.Services
             await _context.SaveChangesAsync();
 
         }
+
+        public async Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy)
+        {
+            var list = await _context.Set<T>().OrderBy(m => m.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "Id":
+                        list = list.OrderByDescending(n => n.Id).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return list;
+        }
+
+
     }
 }

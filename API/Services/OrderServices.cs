@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NuGet.Versioning;
+using Microsoft.AspNetCore.Razor.Language;
+using API.Helpers;
 
 namespace API.Services
 {
@@ -26,9 +28,6 @@ namespace API.Services
             _mapper = mapper;
         }
 
-  
-
-
         public async Task<bool> AddOrderAsync(OrderDtos orderDtos)
         {
             var cus = await _context.Customers.FirstOrDefaultAsync(o => o.Id == orderDtos.CustomerId);
@@ -43,13 +42,11 @@ namespace API.Services
 
                 order.TotalPrice = TotalPrice(order.OrderDetails);
 
-                decimal zzz = 0;
-
                 if (order.TotalPrice > 0)
                 {
                     var list = order.OrderDetails;
                     order.OrderDetails = null;
-                    
+
                     await _context.Orders.AddAsync(order);
                     await _context.SaveChangesAsync();
 
@@ -58,7 +55,7 @@ namespace API.Services
                     {
                         foreach (var item in list)
                         {
-                            if ( checkammount(item) == true && UpdateAmmount(item) )
+                            if (checkammount(item) == true && UpdateAmmount(item))
                             {
                                 var orderDetail = _mapper.Map<OrderDetail>(item);
 
@@ -83,7 +80,7 @@ namespace API.Services
             }
             return false;
         }
-
+        
         private decimal TotalPrice(List<OrderDetail> orderDetail)
         {
             decimal res = 0;
@@ -101,7 +98,7 @@ namespace API.Services
         }
         private bool checkammount(OrderDetail orderDetail)
         {
-            var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId );
+            var sp = _context.Products.FirstOrDefault(x => x.Id == orderDetail.ProductId);
 
             if (sp != null && sp.Amount >= orderDetail.ammount)
             {
@@ -147,7 +144,6 @@ namespace API.Services
             var data = await _context.Orders.AsNoTracking().Include(m => m.OrderDetails).FirstOrDefaultAsync(o => o.Id == orderDtos.OrderId);
             var order = _mapper.Map<Order>(orderDtos);
 
-            //order.TotalPrice = TotalPrice(orderDtos.orderDetailDtos);
             order.ModifiedDate = DateTime.Now;
             order.CreatedDate = data.CreatedDate;
 
@@ -163,10 +159,69 @@ namespace API.Services
             return true;
         }
 
+        // FE xử lý
+        public async Task<bool> AddOrderAsync_1 (OrderDtos orderDtos)
+        {
+            var cus = await _context.Customers.FirstOrDefaultAsync(o => o.Id == orderDtos.CustomerId);
+            if (cus != null)
+            {
+                var order = _mapper.Map<Order>(orderDtos);
+
+                order.CreatedBy = "admin";
+                order.CreatedDate = DateTime.Now;
+                order.ModifiedDate = DateTime.Now;
+                order.ModifiedBy = "admin";
+
+                //order.TotalPrice = TotalPrice(order.OrderDetails);
+
+                if (order.TotalPrice > 0)
+                {
+                    var list = order.OrderDetails;
+                    order.OrderDetails = null;
+
+                    await _context.Orders.AddAsync(order);
+                    await _context.SaveChangesAsync();
 
 
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            if (/*checkammount(item) == true && */ UpdateAmmount(item))
+                            {
+                                var orderDetail = _mapper.Map<OrderDetail>(item);
 
+                                orderDetail.OrderNo = "";
 
+                                orderDetail.CreatedBy = "";
+                                orderDetail.CreatedDate = DateTime.Now;
+                                orderDetail.ModifiedDate = DateTime.Now;
+                                orderDetail.OrderId = order.Id;
 
+                                //orderDetail.TotalPrice = item.price * item.ammount;
+
+                                await _context.OrderDetails.AddAsync(orderDetail);
+
+                            }
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public IEnumerable<Order> GetAllAsyncSearchandPaging(IEnumerable<Order> source, string searchString, int? pageNumber, int pageSize)
+        {
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                source= source.Where(x=>x.OrderNo ==searchString).ToList();
+            }
+
+            source = Pagging<Order>.Create(source.AsQueryable(), pageNumber ?? 1, pageSize);
+            return source;
+        }
     }
 }

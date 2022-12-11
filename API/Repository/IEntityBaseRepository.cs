@@ -17,6 +17,12 @@ namespace API.Repository
         Task AddAsync(T entity);
 
         Task UpdateAsync(T entity);
+
+        // Sort
+        Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy);
+
+
+
     }
 
 }

@@ -23,11 +23,28 @@ namespace API.Controllers
             _mapper = mapper;
         }
         //[HttpGet]
-        //public async Task<IActionResult> GetOrder()
+        //public async Task<IActionResult> GetAllOrder()
         //{
         //    var list = await _orderRepository.GetQuery().Include(m => m.OrderDetails).ToListAsync();
         //    return Ok(list);
         //}
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrder(string sortBy, string searchString, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var _result = await _orderRepository.GetAllAsyncSortById(sortBy);
+                
+                _result = _orderRepository.GetAllAsyncSearchandPaging(_result, searchString, pageNumber, pageSize);
+                return Ok(_result);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Khong ton tai danh sach san pham");
+            }
+        }
+
 
 
         [HttpGet("{id}")]
@@ -52,7 +69,8 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(OrderDtos orderDtos)
         {
-            var check = await _orderRepository.AddOrderAsync(orderDtos);
+            //var check = await _orderRepository.AddOrderAsync(orderDtos);
+            var check = await _orderRepository.AddOrderAsync_1(orderDtos);
             if (check == true)
             {
                 return Ok(new { message = "AddOrder thanh cong" });

@@ -8,6 +8,7 @@ namespace API.Repository
     public interface IBuyOrderRepository : IEntityBaseRepository<BuyOrder>
     {
         Task<bool> AddBuyOrderAsync(BuyOrderDtos orderDtos);
+        Task<bool> AddBuyOrderAsync_1(BuyOrderDtos orderDtos);
         Task<IList<BuyOrder>> GetBuyOrderbyOrderId(int CusId);
 
         Task<bool> UpdateBuyOrder(BuyOrderDtos orderDtos);
