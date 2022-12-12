@@ -1,5 +1,6 @@
 ﻿using API.Dtos;
 using API.Entites;
+using API.Helpers;
 using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -47,7 +50,16 @@ namespace API.Controllers
             {
                 var _result = await _productRepository.GetAllAsyncSortById(sortBy);
                 _result = _productRepository.GetAllAsyncSearchandPaging(_result, searchString, pageNumber, pageSize);
-                return Ok(_result);
+
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "GetAllProduct thanh cong",
+                    Data = _result,
+                };
+
+                return Ok(results);
+
             }
             catch (Exception)
             {
@@ -63,13 +75,15 @@ namespace API.Controllers
             var dulieu = await _productRepository.GetByIdAsync(id);
 
             if (dulieu == null) return NotFound();
-            var dulieu_map = dulieu;
 
-            return Ok(new
+            var results = new results()
             {
-                message = "GetProductsBy Idthanh cong",
-                data = dulieu_map
-            });
+                statusCode = 200,
+                message = "GetProductsById thanh cong",
+                Data = dulieu,
+            };
+
+            return Ok(results);
         }
 
         // api/Products/name?name=3
@@ -78,28 +92,56 @@ namespace API.Controllers
         [HttpPost("add-pro")]
         public async Task<IActionResult> CreateProduct(ProductDtos productDtos)
         {
-            // ko nhap vao id
-            var data = await _productRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == productDtos.FullName);
-            if (data == null)
+            try
             {
-                var cus = _mapper.Map<Product>(productDtos);
-                await _productRepository.AddAsync(cus);
-                return Ok(new { message = "CreateProduct thanh cong" });
+                var data = await _productRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == productDtos.FullName);
+                if (data == null)
+                {
+                    var cus = _mapper.Map<Product>(productDtos);
+                    await _productRepository.AddAsync(cus);
+
+                    var results = new results()
+                    {
+                        statusCode = 200,
+                        message = "CreateProduct thanh cong",
+                    };
+                    return Ok(results);
+                }
+                return BadRequest("CreateProduct khong thanh cong");
             }
-            return BadRequest();
+            // ko nhap vao id
+            catch
+            {
+                return BadRequest("CreateProduct khong thanh cong");
+            }
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+
         //https://localhost:44381/api/Products?id=9
         [HttpPut("put-pro")]
         public async Task<IActionResult> UpdateProduct(Product product)
         {
-            var data = await _productRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == product.Id);
-            if (data != null)
+            try
             {
-                await _productRepository.UpdateAsync(product);
-                return Ok(new { message = "UpdateOrder thanh cong" });
+                var data = await _productRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == product.Id);
+                if (data != null)
+                {
+                    await _productRepository.UpdateAsync(product);
+
+                    var results = new results()
+                    {
+                        statusCode = 200,
+                        message = "UpdateProduct thanh cong",
+                    };
+
+                    return Ok(results);
+                }
+                return BadRequest("UpdateProduct khong thanh cong");
             }
-            return BadRequest();
+            catch
+            {
+                return BadRequest("UpdateProduct khong thanh cong");
+            }
 
         }
 
@@ -110,7 +152,12 @@ namespace API.Controllers
             try
             {
                 await _productRepository.DeleteAsync(id);
-                return Ok(new { message = "DeleteProduct thanh cong" });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "UpdateProduct thanh cong",
+                };
+                return Ok(results);
             }
             catch (Exception ex)
             {
