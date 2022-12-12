@@ -56,33 +56,31 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteCustomrer(int id)
         {
             await _customerRepository.DeleteAsync(id);
-            return Ok(new { message = "xoa thanh cong" });
+            return Ok(new { message = "DeleteCustomrer thanh cong" });
         }
         [HttpPost]
-        public async Task<bool> CreateCustomrer(CustomerDtos customerdtos)
+        public async Task<IActionResult> CreateCustomrer(CustomerDtos customerdtos)
         {
             var data = await _customerRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == customerdtos.FullName);
             if(data== null)
             {
                 var cus = _mapper.Map<Customer>(customerdtos);
                 await _customerRepository.AddAsync(cus);
-                return true;
+                return Ok(new { message = "CreateCustomrer thanh cong" });
             }
-            return false;
+            return BadRequest();
         }
         [HttpPut]
         //https://localhost:44381/api/Customers?id=21862dcd-b42c-4468-9b8d-f86d9f5fcc6f
-        public async Task<bool> UpdateCustomer(Customer customer)
+        public async Task<IActionResult> UpdateCustomer(Customer customer)
         {
             var data = await _customerRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == customer.Id);
             if (data != null)
             {
-                //data = _mapper.Map<Customer>(customerdtos);
-                
                 await _customerRepository.UpdateAsync(customer);
-                return true;
+                return Ok(new { message = "UpdateCustomrer thanh cong" });
             }
-            return false;
+            return BadRequest();
         }
     }
 }

@@ -55,8 +55,6 @@ namespace API.Controllers
             }
         }
 
-
-
         // api/Products/3
         [HttpGet("get-pro/{id}")]
         public async Task<IActionResult> GetProductsById(int id)
@@ -78,7 +76,7 @@ namespace API.Controllers
 
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         [HttpPost("add-pro")]
-        public async Task<bool> CreateProduct(ProductDtos productDtos)
+        public async Task<IActionResult> CreateProduct(ProductDtos productDtos)
         {
             // ko nhap vao id
             var data = await _productRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == productDtos.FullName);
@@ -86,22 +84,22 @@ namespace API.Controllers
             {
                 var cus = _mapper.Map<Product>(productDtos);
                 await _productRepository.AddAsync(cus);
-                return true;
+                return Ok(new { message = "CreateProduct thanh cong" });
             }
-            return false;
+            return BadRequest();
         }
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
         //https://localhost:44381/api/Products?id=9
         [HttpPut("put-pro")]
-        public async Task<bool> UpdateProduct(Product product)
+        public async Task<IActionResult> UpdateProduct(Product product)
         {
             var data = await _productRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == product.Id);
             if (data != null)
             {
                 await _productRepository.UpdateAsync(product);
-                return true;
+                return Ok(new { message = "UpdateOrder thanh cong" });
             }
-            return false;
+            return BadRequest();
 
         }
 
@@ -112,7 +110,7 @@ namespace API.Controllers
             try
             {
                 await _productRepository.DeleteAsync(id);
-                return Ok(new { message = "xoa thanh cong" });
+                return Ok(new { message = "DeleteProduct thanh cong" });
             }
             catch (Exception ex)
             {

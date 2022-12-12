@@ -39,7 +39,10 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteOrderDetail(int id)
         {
             await _orderDetailRepository.DeleteAsync(id);
-            return Ok(new { message = "xoa thanh cong" });
+            return Ok(new 
+            { 
+                message = "DeleteOrderDetail thanh cong"
+            });
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetailById(int id)

@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="Data\SeedData\products.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Data\SeedData\products.json" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

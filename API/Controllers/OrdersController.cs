@@ -31,21 +31,26 @@ namespace API.Controllers
         //}
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrder(string sortBy, string searchString, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAllOrder (string sortBy, string searchString, int pageNumber, int pageSize)
         {
             try
             {
                 var _result = await _orderRepository.GetAllAsyncSortById(sortBy, m=>m.customer);
 
                 _result = _orderRepository.GetAllAsyncSearchandPaging(_result, searchString, pageNumber, pageSize);
-                return Ok(_result);
+                return Ok(
+                    new
+                    {
+                        message = "GetAllOrder thanh cong",
+                        data = _result,
+                    });
             }
             catch (Exception)
             {
                 return BadRequest("Khong ton tai danh sach san pham");
             }
         }
-
+       
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderbyOrderId(int id)
@@ -89,7 +94,7 @@ namespace API.Controllers
                 return Ok(
                     new
                     {
-                        message = "DeleteOrderbyOrderId  thanh cong",
+                        message = "DeleteOrderbyOrderId thanh cong",
                     });
             }
             catch
@@ -99,12 +104,14 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<bool> Update(OrderDtos Order)
+        public async Task<IActionResult> Update(OrderDtos Order)
         {
             var check = await _orderRepository.UpdateOrder(Order);
             if (check == true)
-                return true;
-            return false;
+            {
+                return Ok(new { message = "UpdateOrder thanh cong" });
+            }
+            return BadRequest();
         }
     }
 }

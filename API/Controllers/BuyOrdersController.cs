@@ -13,7 +13,7 @@ namespace API.Controllers
     [ApiController]
     public class BuyOrdersController : ControllerBase
     {
-        private readonly IBuyOrderRepository _BuyorderRepository ;
+        private readonly IBuyOrderRepository _BuyorderRepository;
         private readonly IMapper _mapper;
         public BuyOrdersController(IBuyOrderRepository services, IMapper mapper)
         {
@@ -23,8 +23,12 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBuyOrder()
         {
-            var list = await _BuyorderRepository.GetQuery().Include(m =>m.BuyOrderDetails ).ToListAsync();
-            return Ok(list);
+            var list = await _BuyorderRepository.GetQuery().Include(m => m.BuyOrderDetails).ToListAsync();
+            return Ok(new
+            {
+                message = "Ok",
+                data = list,
+            });
         }
 
         [HttpGet("{id}")]
@@ -34,12 +38,11 @@ namespace API.Controllers
             {
                 var listOrder = await _BuyorderRepository.GetBuyOrderbyOrderId(id);
 
-                return Ok(
-                    new
-                    {
-                        message = "Ok",
-                        data = listOrder,
-                    });
+                return Ok(new
+                {
+                    message = "Ok",
+                    data = listOrder,
+                });
             }
             catch
             {
@@ -77,12 +80,16 @@ namespace API.Controllers
             }
         }
         [HttpPut]
-        public async Task<bool> Update(BuyOrderDtos buyorderDtos)
+        public async Task<IActionResult> Update(BuyOrderDtos buyorderDtos)
         {
             var check = await _BuyorderRepository.UpdateBuyOrder(buyorderDtos);
             if (check == true)
-                return true;
-            return false;
+                return Ok(
+                    new
+                    {
+                        message = "UpdateBuyOrder thanh cong",
+                    });
+            return BadRequest();
         }
     }
 }
