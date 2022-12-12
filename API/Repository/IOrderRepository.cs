@@ -11,6 +11,7 @@ namespace API.Repository
 {
     public interface IOrderRepository :IEntityBaseRepository<Order>
     {
+        // Be xử lý
         Task<bool> AddOrderAsync(OrderDtos orderDtos);
 
         // Fe xử lý
@@ -20,6 +21,5 @@ namespace API.Repository
 
         Task<bool> UpdateOrder(OrderDtos orderDtos);
 
-        IEnumerable<Order> GetAllAsyncSearchandPaging(IEnumerable<Order> source, string searchString, int? pageNumber, int pageSize);
     }
 }

@@ -33,7 +33,6 @@ namespace API.Controllers
         //public async Task<IActionResult> GetProducts()
         //{
         //    var dulieu = await _productRepository.GetAllAsync();
-
         //    if (dulieu == null) return NotFound();
         //    // return list with special
         //    return Ok(new
@@ -44,12 +43,11 @@ namespace API.Controllers
         //}
 
         [HttpGet("get-pro")]
-        public async Task<IActionResult> GetAllProduct(string sortBy, string searchString, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAllProduct(string sortBy, int? pageNumber, int pageSize)
         {
             try
             {
-                var _result = await _productRepository.GetAllAsyncSortById(sortBy);
-                _result = _productRepository.GetAllAsyncSearchandPaging(_result, searchString, pageNumber, pageSize);
+                var _result = await _productRepository.GetAllAsyncSortByIdAndPaging(sortBy,pageNumber,pageSize);
 
                 var results = new results()
                 {

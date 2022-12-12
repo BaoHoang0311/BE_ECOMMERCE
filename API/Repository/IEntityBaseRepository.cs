@@ -23,10 +23,8 @@ namespace API.Repository
 
         Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
 
-        // Sort
-        Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy);
         // Sort with table
-        Task<IEnumerable<T>> GetAllAsyncSortById( string sortBy, params Expression<Func<T, object>>[] includeProperties );
+        Task<IEnumerable<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties );
 
 
     }

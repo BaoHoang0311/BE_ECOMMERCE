@@ -1,5 +1,6 @@
 ﻿using API.Dtos;
 using API.Entites;
+using API.Helpers;
 using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -31,23 +32,24 @@ namespace API.Controllers
         //}
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrder (string sortBy, string searchString, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAllOrder (string sortBy, int pageNumber, int pageSize)
         {
             try
             {
-                var _result = await _orderRepository.GetAllAsyncSortById(sortBy, m=>m.customer);
+                var _result = await _orderRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize, m=>m.customer,m=>m.OrderDetails);
 
-                _result = _orderRepository.GetAllAsyncSearchandPaging(_result, searchString, pageNumber, pageSize);
-                return Ok(
-                    new
-                    {
-                        message = "GetAllOrder thanh cong",
-                        data = _result,
-                    });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "GetAllProduct thanh cong",
+                    Data = _result,
+                };
+
+                return Ok(results);
             }
             catch (Exception)
             {
-                return BadRequest("Khong ton tai danh sach san pham");
+                return BadRequest("Khong ton tai danh sach Order");
             }
         }
        

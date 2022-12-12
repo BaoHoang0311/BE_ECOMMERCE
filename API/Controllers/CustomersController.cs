@@ -21,14 +21,15 @@ namespace API.Controllers
             _customerRepository = services;
             _mapper = mapper;
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetCustomers()
+        public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber, int pageSize)
         {
 
-            var dulieu = await _customerRepository.GetAllAsync();
+            var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
 
             if (dulieu == null) return NotFound();
-            var dulieu_map = dulieu;
+
             // return list with special
             return Ok(new
             {

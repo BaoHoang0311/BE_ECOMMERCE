@@ -1,10 +1,13 @@
 ﻿using API.Dtos;
 using API.Entites;
+using API.Helpers;
 using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -21,14 +24,26 @@ namespace API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllBuyOrder()
+        public async Task<IActionResult> GetAllBuyOrder(string sortBy, int pageNumber, int pageSize)
         {
-            var list = await _BuyorderRepository.GetQuery().Include(m => m.BuyOrderDetails).ToListAsync();
-            return Ok(new
+            try
             {
-                message = "Ok",
-                data = list,
-            });
+                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy,pageNumber, pageSize);
+
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "GetAllBuyOrder thanh cong",
+                    Data = _result,
+                };
+
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Khong ton tai danh sach BuyOrder");
+            }
+
         }
 
         [HttpGet("{id}")]

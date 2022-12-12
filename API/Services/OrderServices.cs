@@ -213,17 +213,6 @@ namespace API.Services
             }
             return false;
         }
-
-        public IEnumerable<Order> GetAllAsyncSearchandPaging(IEnumerable<Order> source, string searchString, int? pageNumber, int pageSize)
-        {
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                source= source.Where(x=>x.OrderNo ==searchString).ToList();
-            }
-
-            source = Pagging<Order>.Create(source.AsQueryable(), pageNumber ?? 1, pageSize);
-            return source;
-        }
         
     }
 }

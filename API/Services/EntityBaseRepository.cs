@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
@@ -29,12 +30,19 @@ namespace API.Services
             var data = await _context.Set<T>().ToListAsync();
             return data;
         }
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            return await query.ToListAsync();
+        }
 
         public async Task<T> GetByIdAsync(int id)
         {
             var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id == id);
             return data;
         }
+
         public IQueryable<T> GetQuery()
         {
             var data = _context.Set<T>().AsQueryable();
@@ -53,7 +61,7 @@ namespace API.Services
 
         public async Task AddAsync(T entity)
         {
-        
+
             entity.CreatedBy = "";
             entity.CreatedDate = DateTime.Now;
             entity.ModifiedDate = DateTime.Now;
@@ -67,35 +75,17 @@ namespace API.Services
         {
 
             entity.ModifiedDate = DateTime.Now;
-           
+
             _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync();
 
         }
 
-        // single table
-        public async Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy)
+        public async Task<IEnumerable<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties)
         {
-            var list = await _context.Set<T>().OrderBy(m => m.Id).ToListAsync();
 
-            if (!string.IsNullOrEmpty(sortBy))
-            {
-                switch (sortBy)
-                {
-                    case "Id":
-                        list = list.OrderByDescending(n => n.Id).ToList();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return list;
-        }
-        public async Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy, params Expression<Func<T, object>>[] includeProperties )
-        {
             IQueryable<T> query = _context.Set<T>();
             query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-
             var list = await query.OrderBy(m => m.Id).ToListAsync();
 
             if (!string.IsNullOrEmpty(sortBy))
@@ -109,13 +99,9 @@ namespace API.Services
                         break;
                 }
             }
+            //int pageSize = 5;
+            list = Pagging<T>.Create(list.AsQueryable(), pageNumber ?? 1, pageSize);
             return list;
-        }
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> query = _context.Set<T>();
-            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            return await query.ToListAsync();
         }
     }
 }
