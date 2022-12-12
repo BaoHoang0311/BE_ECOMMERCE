@@ -22,6 +22,7 @@ namespace API.Controllers
             _orderRepository = services;
             _mapper = mapper;
         }
+
         //[HttpGet]
         //public async Task<IActionResult> GetAllOrder()
         //{
@@ -34,8 +35,8 @@ namespace API.Controllers
         {
             try
             {
-                var _result = await _orderRepository.GetAllAsyncSortById(sortBy);
-                
+                var _result = await _orderRepository.GetAllAsyncSortById(sortBy, m=>m.customer);
+
                 _result = _orderRepository.GetAllAsyncSearchandPaging(_result, searchString, pageNumber, pageSize);
                 return Ok(_result);
             }
@@ -44,7 +45,6 @@ namespace API.Controllers
                 return BadRequest("Khong ton tai danh sach san pham");
             }
         }
-
 
 
         [HttpGet("{id}")]
@@ -78,6 +78,7 @@ namespace API.Controllers
             }
             return BadRequest();
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrderbyOrderId(int id)
         {
@@ -96,6 +97,7 @@ namespace API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpPut]
         public async Task<bool> Update(OrderDtos Order)
         {

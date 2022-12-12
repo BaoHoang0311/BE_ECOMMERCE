@@ -28,6 +28,7 @@ namespace API.Services
             _mapper = mapper;
         }
 
+        // BE tính 
         public async Task<bool> AddOrderAsync(OrderDtos orderDtos)
         {
             var cus = await _context.Customers.FirstOrDefaultAsync(o => o.Id == orderDtos.CustomerId);
@@ -223,5 +224,6 @@ namespace API.Services
             source = Pagging<Order>.Create(source.AsQueryable(), pageNumber ?? 1, pageSize);
             return source;
         }
+        
     }
 }

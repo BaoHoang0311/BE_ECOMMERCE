@@ -9,6 +9,7 @@ using NuGet.Versioning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,6 +73,7 @@ namespace API.Services
 
         }
 
+        // single table
         public async Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy)
         {
             var list = await _context.Set<T>().OrderBy(m => m.Id).ToListAsync();
@@ -89,7 +91,31 @@ namespace API.Services
             }
             return list;
         }
+        public async Task<IEnumerable<T>> GetAllAsyncSortById(string sortBy, params Expression<Func<T, object>>[] includeProperties )
+        {
+            IQueryable<T> query = _context.Set<T>();
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
 
+            var list = await query.OrderBy(m => m.Id).ToListAsync();
 
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "Id":
+                        list = list.OrderByDescending(n => n.Id).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return list;
+        }
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            return await query.ToListAsync();
+        }
     }
 }

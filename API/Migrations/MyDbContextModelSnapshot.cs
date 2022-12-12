@@ -55,7 +55,7 @@ namespace API.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("BuyOrders");
+                    b.ToTable("BuyOrders", (string)null);
                 });
 
             modelBuilder.Entity("API.Entites.BuyOrderDetail", b =>
@@ -102,7 +102,7 @@ namespace API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("BuyOrderDetails");
+                    b.ToTable("BuyOrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("API.Entites.Customer", b =>
@@ -139,7 +139,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("API.Entites.Order", b =>
@@ -175,7 +175,7 @@ namespace API.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("API.Entites.OrderDetail", b =>
@@ -222,7 +222,7 @@ namespace API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("API.Entites.Product", b =>
@@ -257,7 +257,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("API.Entites.BuyOrder", b =>
