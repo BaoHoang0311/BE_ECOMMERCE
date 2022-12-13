@@ -42,7 +42,7 @@ namespace API.Controllers
         //    }) ;
         //}
 
-        [HttpGet("get-pro")]
+        [HttpGet]
         public async Task<IActionResult> GetAllProduct(string sortBy, int? pageNumber, int pageSize)
         {
             try
@@ -66,7 +66,7 @@ namespace API.Controllers
         }
 
         // api/Products/3
-        [HttpGet("get-pro/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetProductsById(int id)
         {
 
@@ -87,7 +87,7 @@ namespace API.Controllers
         // api/Products/name?name=3
 
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
-        [HttpPost("add-pro")]
+        [HttpPost]
         public async Task<IActionResult> CreateProduct(ProductDtos productDtos)
         {
             try
@@ -116,7 +116,7 @@ namespace API.Controllers
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
 
         //https://localhost:44381/api/Products?id=9
-        [HttpPut("put-pro")]
+        [HttpPut]
         public async Task<IActionResult> UpdateProduct(Product product)
         {
             try
@@ -143,7 +143,7 @@ namespace API.Controllers
 
         }
 
-        [HttpDelete("del-pro")]
+        [HttpDelete]
         //https://localhost:44381/api/Orders/4
         public async Task<IActionResult> DeleteProduct(int id)
         {
