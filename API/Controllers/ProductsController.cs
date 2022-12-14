@@ -47,7 +47,7 @@ namespace API.Controllers
         {
             try
             {
-                var _result = await _productRepository.GetAllAsyncSortByIdAndPaging(sortBy,pageNumber,pageSize);
+                var _result = await _productRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
 
                 var results = new results()
                 {
@@ -124,6 +124,7 @@ namespace API.Controllers
                 var data = await _productRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == product.Id);
                 if (data != null)
                 {
+                    product.CreatedDate = data.CreatedDate;
                     await _productRepository.UpdateAsync(product);
 
                     var results = new results()

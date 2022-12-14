@@ -21,6 +21,11 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin", option => option.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+
             // Add services to the container.
             var services = builder.Services;
             services.AddDbContext<MyDbContext>(x =>
@@ -57,7 +62,7 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseHttpsRedirection();
 
