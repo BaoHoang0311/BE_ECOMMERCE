@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -23,17 +24,19 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber, int pageSize)
+        public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber , int pageSize)
         {
-
-            var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
-
+            //pageSize = 2;
+            var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber , pageSize );
+            var AllCus = await _customerRepository.GetAllAsync();
+            var totalCus = AllCus.ToList().Count();
             if (dulieu == null) return NotFound();
 
             // return list with special
             return Ok(new
             {
                 message = "GetCustomers thanh cong",
+                total = totalCus,
                 data = dulieu
             });
 
