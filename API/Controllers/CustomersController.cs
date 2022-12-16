@@ -1,5 +1,6 @@
 ﻿using API.Dtos;
 using API.Entites;
+using API.Helpers;
 using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -56,11 +57,18 @@ namespace API.Controllers
             });
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteCustomrer(int id)
         {
             await _customerRepository.DeleteAsync(id);
-            return Ok(new { message = "DeleteCustomrer thanh cong" });
+
+            var results = new results()
+            {
+                statusCode = 200,
+                message = "DeleteCustomrer thanh cong",
+            };
+
+            return Ok(results);
         }
         [HttpPost]
         public async Task<IActionResult> CreateCustomrer(CustomerDtos customerdtos)
@@ -70,7 +78,13 @@ namespace API.Controllers
             {
                 var cus = _mapper.Map<Customer>(customerdtos);
                 await _customerRepository.AddAsync(cus);
-                return Ok(new { message = "CreateCustomrer thanh cong" });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "CreateCustomrer thanh cong",
+                };
+
+                return Ok(results);
             }
             return BadRequest();
         }
@@ -82,7 +96,12 @@ namespace API.Controllers
             if (data != null)
             {
                 await _customerRepository.UpdateAsync(customer);
-                return Ok(new { message = "UpdateCustomrer thanh cong" });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "UpdateCustomer thanh cong",
+                };
+                return Ok(results);
             }
             return BadRequest();
         }
