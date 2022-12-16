@@ -27,7 +27,6 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber , int pageSize)
         {
-            //pageSize = 2;
             var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber , pageSize );
             var AllCus = await _customerRepository.GetAllAsync();
             var totalCus = AllCus.ToList().Count();
@@ -40,7 +39,18 @@ namespace API.Controllers
                 total = totalCus,
                 data = dulieu
             });
+        }
+        [HttpGet("/api/all-cus")]
+        public async Task<IActionResult> GetCustomers()
+        {
+            var AllCus = await _customerRepository.GetAllAsync();
 
+            // return list with special
+            return Ok(new
+            {
+                message = "GetCustomers thanh cong",
+                data = AllCus
+            });
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomesrsById(int id)
@@ -48,12 +58,11 @@ namespace API.Controllers
             var dulieu = await _customerRepository.GetByIdAsync(id);
 
             if (dulieu == null) return NotFound();
-            var dulieu_map = dulieu;
 
             return Ok(new
             {
                 message = "GetCustomesrsById thanh cong",
-                data = dulieu_map
+                data = dulieu
             });
         }
 

@@ -13,7 +13,6 @@ namespace API.Helpers
         {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
             this.AddRange(items);
         }
         public static Pagging<T> Create(IQueryable<T> source, int pageIndex, int pageSize)
