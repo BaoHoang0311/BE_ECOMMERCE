@@ -113,6 +113,7 @@ namespace API.Controllers
                 return BadRequest("CreateProduct khong thanh cong");
             }
         }
+
         //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
 
         //https://localhost:44381/api/Products?id=9

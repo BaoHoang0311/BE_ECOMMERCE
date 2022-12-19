@@ -80,24 +80,29 @@ namespace API.Controllers
             var check = await _orderRepository.AddOrderAsync_1(orderDtos);
             if (check == true)
             {
-                return Ok(new { message = "AddOrder thanh cong" });
-
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "AddOrder thanh cong",
+                };
+                return Ok(results);
             }
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteOrderbyOrderId(int id)
         {
             try
             {
                 await _orderRepository.DeleteAsync(id);
 
-                return Ok(
-                    new
-                    {
-                        message = "DeleteOrderbyOrderId thanh cong",
-                    });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "DeleteOrderbyOrderId thanh cong",
+                };
+                return Ok(results);
             }
             catch
             {
@@ -111,7 +116,12 @@ namespace API.Controllers
             var check = await _orderRepository.UpdateOrder(Order);
             if (check == true)
             {
-                return Ok(new { message = "UpdateOrder thanh cong" });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "UpdateProduct thanh cong",
+                };
+                return Ok(results);
             }
             return BadRequest();
         }

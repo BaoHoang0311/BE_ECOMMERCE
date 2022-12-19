@@ -28,7 +28,7 @@ namespace API.Controllers
         {
             try
             {
-                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy,pageNumber, pageSize);
+                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
 
                 var results = new results()
                 {
@@ -43,7 +43,6 @@ namespace API.Controllers
             {
                 return BadRequest("Khong ton tai danh sach BuyOrder");
             }
-
         }
 
         [HttpGet("{id}")]
@@ -53,11 +52,12 @@ namespace API.Controllers
             {
                 var listOrder = await _BuyorderRepository.GetBuyOrderbyOrderId(id);
 
-                return Ok(new
+                var results = new results()
                 {
-                    message = "Ok",
-                    data = listOrder,
-                });
+                    statusCode = 200,
+                    message = "GetBuyOrderbyOrderId thanh cong",
+                };
+                return Ok(results);
             }
             catch
             {
@@ -65,14 +65,21 @@ namespace API.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddOrder(BuyOrderDtos buyorderDtos)
+        public async Task<IActionResult> AddBuyOrder(BuyOrderDtos buyorderDtos)
         {
             //var check = await _BuyorderRepository.AddBuyOrderAsync(buyorderDtos);
             var check = await _BuyorderRepository.AddBuyOrderAsync_1(buyorderDtos);
             if (check == true)
             {
-                return Ok(new { message = "AddOrder thanh cong" });
-
+                if (check == true)
+                {
+                    var results = new results()
+                    {
+                        statusCode = 200,
+                        message = "AddBuyOrder thanh cong",
+                    };
+                    return Ok(results);
+                }
             }
             return BadRequest();
         }
@@ -83,11 +90,12 @@ namespace API.Controllers
             {
                 await _BuyorderRepository.DeleteAsync(id);
 
-                return Ok(
-                    new
-                    {
-                        message = "DeleteBuyOrderbyOrderId  thanh cong",
-                    });
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "DeleteBuyOrderbyOrderId thanh cong",
+                };
+                return Ok(results);
             }
             catch
             {
@@ -99,11 +107,14 @@ namespace API.Controllers
         {
             var check = await _BuyorderRepository.UpdateBuyOrder(buyorderDtos);
             if (check == true)
-                return Ok(
-                    new
-                    {
-                        message = "UpdateBuyOrder thanh cong",
-                    });
+            {
+                var results = new results()
+                {
+                    statusCode = 200,
+                    message = "DeleteBuyOrderbyOrderId thanh cong",
+                };
+                return Ok(results);
+            }
             return BadRequest();
         }
     }
