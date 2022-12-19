@@ -32,11 +32,13 @@ namespace API.Controllers
 
             if (dulieu == null) return NotFound();
 
-            return Ok(new
+            var results = new results()
             {
-                message = "GetProducts thanh cong",
-                data = dulieu
-            });
+                statusCode = 200,
+                message = "GetOrderDetails thanh cong",
+            };
+
+            return Ok(results);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateOrderDetails(OrderDetailDtos orderDetaildtos)
@@ -62,10 +64,13 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteOrderDetail(int id)
         {
             await _orderDetailRepository.DeleteAsync(id);
-            return Ok(new 
-            { 
-                message = "DeleteOrderDetail thanh cong"
-            });
+            var results = new results()
+            {
+                statusCode = 200,
+                message = "DeleteOrderDetail thanh cong",
+            };
+
+            return Ok(results);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetailById(int id)
@@ -75,11 +80,13 @@ namespace API.Controllers
 
             if (dulieu == null) return NotFound();
 
-            return Ok(new
+            var results = new results()
             {
-                message = "GetProductsBy Idthanh cong",
-                data = dulieu
-            });
+                statusCode = 200,
+                message = "GetOrderDetailById thanh cong",
+            };
+
+            return Ok(results);
         }
     }
 }
