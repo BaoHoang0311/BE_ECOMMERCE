@@ -33,7 +33,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetAllBuyOrder thanh cong",
+                    message = "GetAllBuyOrder success",
                     Data = _result,
                 };
 
@@ -41,7 +41,7 @@ namespace API.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Khong ton tai danh sach BuyOrder");
+                return BadRequest("Not exits BuyOrder");
             }
         }
 
@@ -55,7 +55,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetBuyOrderbyOrderId thanh cong",
+                    message = "GetBuyOrderbyOrderId success",
                 };
                 return Ok(results);
             }
@@ -76,7 +76,7 @@ namespace API.Controllers
                     var results = new results()
                     {
                         statusCode = 200,
-                        message = "AddBuyOrder thanh cong",
+                        message = "AddBuyOrder success",
                     };
                     return Ok(results);
                 }
@@ -93,7 +93,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "DeleteBuyOrderbyOrderId thanh cong",
+                    message = "DeleteBuyOrderbyOrderId success",
                 };
                 return Ok(results);
             }
@@ -111,7 +111,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "DeleteBuyOrderbyOrderId thanh cong",
+                    message = "DeleteBuyOrderbyOrderId success",
                 };
                 return Ok(results);
             }

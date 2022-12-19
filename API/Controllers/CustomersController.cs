@@ -25,9 +25,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber , int pageSize)
+        public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber, int pageSize)
         {
-            var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber , pageSize );
+            var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
             var AllCus = await _customerRepository.GetAllAsync();
             var totalCus = AllCus.ToList().Count();
             if (dulieu == null) return NotFound();
@@ -35,7 +35,7 @@ namespace API.Controllers
             // return list with special
             return Ok(new
             {
-                message = "GetCustomers thanh cong",
+                message = "GetCustomers success",
                 total = totalCus,
                 data = dulieu
             });
@@ -48,7 +48,7 @@ namespace API.Controllers
             // return list with special
             return Ok(new
             {
-                message = "GetCustomers thanh cong",
+                message = "GetCustomers success",
                 data = AllCus
             });
         }
@@ -61,7 +61,7 @@ namespace API.Controllers
 
             return Ok(new
             {
-                message = "GetCustomesrsById thanh cong",
+                message = "GetCustomesrsById success",
                 data = dulieu
             });
         }
@@ -74,7 +74,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "DeleteCustomrer thanh cong",
+                message = "DeleteCustomrer success",
             };
 
             return Ok(results);
@@ -82,17 +82,17 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCustomrer(CustomerDtos customerdtos)
         {
+
             var data = await _customerRepository.GetQuery().FirstOrDefaultAsync(m => m.FullName == customerdtos.FullName);
-            if(data== null)
+            if (data == null)
             {
                 var cus = _mapper.Map<Customer>(customerdtos);
                 await _customerRepository.AddAsync(cus);
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "CreateCustomrer thanh cong",
+                    message = "CreateCustomrer success",
                 };
-
                 return Ok(results);
             }
             return BadRequest();
@@ -108,7 +108,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateCustomer thanh cong",
+                    message = "UpdateCustomer success",
                 };
                 return Ok(results);
             }

@@ -52,7 +52,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetAllProduct thanh cong",
+                    message = "GetAllProduct success",
                     Data = _result,
                 };
 
@@ -61,7 +61,7 @@ namespace API.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Khong ton tai danh sach san pham");
+                return BadRequest("Not find list of Products");
             }
         }
 
@@ -77,7 +77,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "GetProductsById thanh cong",
+                message = "GetProductsById success",
                 Data = dulieu,
             };
 
@@ -86,7 +86,7 @@ namespace API.Controllers
 
         // api/Products/name?name=3
 
-        //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+        //api/Products
         [HttpPost]
         public async Task<IActionResult> CreateProduct(ProductDtos productDtos)
         {
@@ -101,22 +101,21 @@ namespace API.Controllers
                     var results = new results()
                     {
                         statusCode = 200,
-                        message = "CreateProduct thanh cong",
+                        message = "CreateProduct success",
                     };
                     return Ok(results);
                 }
-                return BadRequest("CreateProduct khong thanh cong");
+                return BadRequest("CreateProduct failed");
             }
             // ko nhap vao id
             catch
             {
-                return BadRequest("CreateProduct khong thanh cong");
+                return BadRequest("CreateProduct failed");
             }
         }
 
-        //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+        //api/Products
 
-        //https://localhost:44381/api/Products?id=9
         [HttpPut]
         public async Task<IActionResult> UpdateProduct(Product product)
         {
@@ -131,22 +130,22 @@ namespace API.Controllers
                     var results = new results()
                     {
                         statusCode = 200,
-                        message = "UpdateProduct thanh cong",
+                        message = "UpdateProduct success",
                     };
 
                     return Ok(results);
                 }
-                return BadRequest("UpdateProduct khong thanh cong");
+                return BadRequest("UpdateProduct failed");
             }
             catch
             {
-                return BadRequest("UpdateProduct khong thanh cong");
+                return BadRequest("UpdateProduct failed");
             }
 
         }
 
+        // https://localhost:44381/api/Product?id=9
         [HttpDelete]
-        //https://localhost:44381/api/Orders/4
         public async Task<IActionResult> DeleteProduct(int id)
         {
             try
@@ -155,7 +154,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateProduct thanh cong",
+                    message = "UpdateProduct success",
                 };
                 return Ok(results);
             }

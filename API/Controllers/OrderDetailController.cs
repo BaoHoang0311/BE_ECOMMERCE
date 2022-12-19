@@ -35,7 +35,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "GetOrderDetails thanh cong",
+                message = "GetOrderDetails success",
             };
 
             return Ok(results);
@@ -54,7 +54,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateOrderDetails thanh cong",
+                    message = "UpdateOrderDetails success",
                 };
                 return Ok(results);
             }
@@ -67,7 +67,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "DeleteOrderDetail thanh cong",
+                message = "DeleteOrderDetail success",
             };
 
             return Ok(results);
@@ -83,7 +83,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "GetOrderDetailById thanh cong",
+                message = "GetOrderDetailById success",
             };
 
             return Ok(results);
