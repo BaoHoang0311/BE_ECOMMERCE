@@ -28,7 +28,7 @@ namespace API.Controllers
         {
             try
             {
-                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
+                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize, m => m.customer, m => m.BuyOrderDetails);
 
                 var results = new results()
                 {

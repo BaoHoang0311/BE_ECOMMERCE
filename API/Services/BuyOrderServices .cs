@@ -151,8 +151,6 @@ namespace API.Services
                 buyorder.ModifiedDate = DateTime.Now;
                 buyorder.ModifiedBy = "admin";
 
-                //buyorder.TotalPrice = TotalPrice(buyorder.BuyOrderDetails);
-
                 if (buyorder.TotalPrice > 0)
                 {
                     var list = buyorder.BuyOrderDetails;
@@ -176,8 +174,6 @@ namespace API.Services
                                 buyorderDetail.CreatedDate = DateTime.Now;
                                 buyorderDetail.ModifiedDate = DateTime.Now;
                                 buyorderDetail.BuyOrderId = buyorder.Id;
-
-                                //buyorderDetail.TotalPrice = item.price * item.ammount;
 
                                 await _context.BuyOrderDetails.AddAsync(buyorderDetail);
 
