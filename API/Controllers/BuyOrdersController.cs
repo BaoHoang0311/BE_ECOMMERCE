@@ -56,6 +56,7 @@ namespace API.Controllers
                 {
                     statusCode = 200,
                     message = "GetBuyOrderbyOrderId success",
+                    Data =  listOrder
                 };
                 return Ok(results);
             }
@@ -83,8 +84,8 @@ namespace API.Controllers
             }
             return BadRequest();
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBuyOrderbyOrderId(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBuyOrder(int id)
         {
             try
             {

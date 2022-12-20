@@ -26,7 +26,7 @@ namespace API.Services
         }
         public async Task<IList<BuyOrder>> GetBuyOrderbyOrderId(int BuyOrderId)
         {
-            var listorder = await _context.BuyOrders.Include(o => o.BuyOrderDetails).ThenInclude(o => o.Product)
+            var listorder = await _context.BuyOrders.Where(x => x.Id == BuyOrderId).Include(o => o.BuyOrderDetails).ThenInclude(o => o.Product)
                                                 .ToListAsync();
 
             if (listorder != null)
