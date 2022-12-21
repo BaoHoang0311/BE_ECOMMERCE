@@ -56,7 +56,7 @@ namespace API.Controllers
                 {
                     statusCode = 200,
                     message = "GetBuyOrderbyOrderId success",
-                    Data =  listOrder
+                    Data = listOrder
                 };
                 return Ok(results);
             }
@@ -70,6 +70,7 @@ namespace API.Controllers
         {
             //var check = await _BuyorderRepository.AddBuyOrderAsync(buyorderDtos);
             var check = await _BuyorderRepository.AddBuyOrderAsync_1(buyorderDtos);
+      
             if (check == true)
             {
                 if (check == true)
@@ -107,12 +108,13 @@ namespace API.Controllers
         public async Task<IActionResult> Update(BuyOrderDtos buyorderDtos)
         {
             var check = await _BuyorderRepository.UpdateBuyOrder(buyorderDtos);
+            var results = new results();
+
             if (check == true)
             {
-                var results = new results()
                 {
-                    statusCode = 200,
-                    message = "DeleteBuyOrderbyOrderId success",
+                    results.statusCode = 200;
+                    results.message = "DeleteBuyOrderbyOrderId success";
                 };
                 return Ok(results);
             }

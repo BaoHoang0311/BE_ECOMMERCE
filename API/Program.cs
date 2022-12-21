@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Helpers;
+using API.Helpers.Nlog;
 using API.Repository;
 using API.Services;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Fluent;
 using System;
+using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -48,12 +52,21 @@ namespace API
             services.AddScoped<IBuyOrderRepository, BuyOrderServices>();
             services.AddScoped<IBuyOrderDetailRepository, BuyOrderDetailServices>();
 
+            //Nlog
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+
+            //System.IO.FileNotFoundException: 'Failed to load NLog LoggingConfiguration. Searched the following locations:
+            //-C:\NglehoangBao\BE_ecommerce\API / nlog.config
+
+
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), @"\Helpers\Nlog\nlog.config"));
 
             // Configure the HTTP request pipeline.
             var app = builder.Build();

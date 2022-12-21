@@ -1,6 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
+using API.Helpers.Nlog;
 using API.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -23,10 +24,12 @@ namespace API.Controllers
     {
         private IProductRepository _productRepository;
         private readonly IMapper _mapper;
-        public ProductsController(IProductRepository services, IMapper mapper)
+        private readonly ILoggerManager _logger;
+        public ProductsController(IProductRepository services, IMapper mapper, ILoggerManager logger)
         {
             _productRepository = services;
             _mapper = mapper;
+            _logger = logger;
         }
 
         //[HttpGet("get-pro")]
@@ -47,6 +50,7 @@ namespace API.Controllers
         {
             try
             {
+                _logger.LogInfo("Get All Product");
                 var _result = await _productRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
 
                 var results = new results()
@@ -61,6 +65,7 @@ namespace API.Controllers
             }
             catch (Exception)
             {
+                _logger.LogWarning("Co loi xay ra ");
                 return BadRequest("Not find list of Products");
             }
         }

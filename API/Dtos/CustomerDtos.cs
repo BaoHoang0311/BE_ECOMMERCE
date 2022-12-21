@@ -18,7 +18,7 @@ namespace API.Dtos
         [Phone(ErrorMessage = "nhap dung formatPhone")]
         public string Phone { get; set; }
         [Required]
-        [StringLength(10, MinimumLength = 3)]
+        [StringLength(1000, MinimumLength = 3)]
         public string Address { get; set; }
     }
 }

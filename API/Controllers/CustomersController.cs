@@ -98,7 +98,7 @@ namespace API.Controllers
             return BadRequest();
         }
         [HttpPut]
-        //https://localhost:44381/api/Customers?id=21862dcd-b42c-4468-9b8d-f86d9f5fcc6f
+        //https://localhost:44381/api/Customers
         public async Task<IActionResult> UpdateCustomer(Customer customer)
         {
             var data = await _customerRepository.GetQuery().AsNoTracking().FirstOrDefaultAsync(m => m.Id == customer.Id);
