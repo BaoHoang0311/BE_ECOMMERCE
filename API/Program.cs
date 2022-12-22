@@ -44,14 +44,14 @@ namespace API
 
             services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ICustomerRepository,CustomerRepository>();
+            services.AddScoped<IProductServices, ProductServices>();
+            services.AddScoped<ICustomerServices,CustomerServices>();
 
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IOrderServices, OrderServices>();
+            services.AddScoped<IOrderDetailServices, OrderDetailServices>();
 
-            services.AddScoped<IBuyOrderRepository, BuyOrderRepository>();
-            services.AddScoped<IBuyOrderDetailRepository, BuyOrderDetailRepository>();
+            services.AddScoped<IBuyOrderServices, BuyOrderServices>();
+            services.AddScoped<IBuyOrderDetailServices, BuyOrderDetailServices>();
 
             //Nlog
             services.AddSingleton<ILoggerManager, LoggerManager>();

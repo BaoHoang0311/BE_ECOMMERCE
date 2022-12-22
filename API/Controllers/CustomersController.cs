@@ -1,7 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,9 @@ namespace API.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private ICustomerRepository _customerRepository;
+        private ICustomerServices _customerRepository;
         private readonly IMapper _mapper;
-        public CustomersController(ICustomerRepository services, IMapper mapper)
+        public CustomersController(ICustomerServices services, IMapper mapper)
         {
             _customerRepository = services;
             _mapper = mapper;

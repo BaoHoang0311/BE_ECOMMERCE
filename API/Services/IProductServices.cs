@@ -1,14 +1,15 @@
 ﻿using API.Dtos;
 using API.Entites;
+using API.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Repository
+namespace API.Services
 {
-    public interface IProductRepository : IEntityBaseRepository<Product>
+    public interface IProductServices : IEntityBaseRepository<Product>
     {
     }
 }

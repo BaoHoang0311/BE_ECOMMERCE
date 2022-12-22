@@ -1,7 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,9 @@ namespace API.Controllers
     [ApiController]
     public class BuyOrderDetailController : ControllerBase
     {
-        private readonly IBuyOrderDetailRepository _buyOrderDetailRepository;
+        private readonly IBuyOrderDetailServices _buyOrderDetailRepository;
         private readonly IMapper _mapper;
-        public BuyOrderDetailController(IBuyOrderDetailRepository buyOrderDetailRepository, IMapper mapper)
+        public BuyOrderDetailController(IBuyOrderDetailServices buyOrderDetailRepository, IMapper mapper)
         {
             _buyOrderDetailRepository= buyOrderDetailRepository;
             _mapper = mapper;

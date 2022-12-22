@@ -1,7 +1,6 @@
 ﻿using API.Data;
 using API.Dtos;
 using API.Entites;
-using API.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -10,15 +9,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using API.Repository;
 
 namespace API.Services
 {
-    public class BuyOrderRepository : EntityBaseRepository<BuyOrder>, IBuyOrderRepository
+    public class BuyOrderServices : EntityBaseRepository<BuyOrder>, IBuyOrderServices
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
 
-        public BuyOrderRepository(MyDbContext context, IMapper mapper)
+        public BuyOrderServices(MyDbContext context, IMapper mapper)
             : base(context)
         {
             _context = context;

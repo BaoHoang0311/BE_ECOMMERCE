@@ -2,7 +2,7 @@
 using API.Entites;
 using API.Helpers;
 using API.Helpers.Nlog;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +22,10 @@ namespace API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private IProductRepository _productRepository;
+        private IProductServices _productRepository;
         private readonly IMapper _mapper;
         private readonly ILoggerManager _logger;
-        public ProductsController(IProductRepository services, IMapper mapper, ILoggerManager logger)
+        public ProductsController(IProductServices services, IMapper mapper, ILoggerManager logger)
         {
             _productRepository = services;
             _mapper = mapper;

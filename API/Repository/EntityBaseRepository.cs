@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace API.Services
+namespace API.Repository
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID, new()
     {

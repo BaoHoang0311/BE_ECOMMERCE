@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class OrderDetailRepository : EntityBaseRepository<OrderDetail>, IOrderDetailRepository
+    public class OrderDetailServices : EntityBaseRepository<OrderDetail>, IOrderDetailServices
     {
         private readonly MyDbContext _context;
-        public OrderDetailRepository(MyDbContext context) : base(context)
+        public OrderDetailServices(MyDbContext context) : base(context)
         {
             _context = context;
         }
