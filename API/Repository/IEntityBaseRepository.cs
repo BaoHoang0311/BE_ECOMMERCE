@@ -21,12 +21,8 @@ namespace API.Repository
 
         Task UpdateAsync(T entity);
 
-        Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
-
         // Sort with table
         Task<IEnumerable<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties );
-
-
     }
-
 }
+//Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
