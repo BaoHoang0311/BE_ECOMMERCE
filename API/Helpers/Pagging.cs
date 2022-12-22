@@ -11,6 +11,7 @@ namespace API.Helpers
     {
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
+        public int totalCus { get; set; }
         public List<T> results { get; set; }
     }
     public class Pagging<T> 
@@ -28,6 +29,7 @@ namespace API.Helpers
                 PageIndex = PageIndex,
                 TotalPages = TotalPages,
                 results = items,
+                totalCus = count,
             };
             return res ;
         }

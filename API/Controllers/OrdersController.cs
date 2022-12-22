@@ -42,7 +42,7 @@ namespace API.Controllers
                 {
                     statusCode = 200,
                     message = "GetAllProduct success",
-                    Data = _result,
+                    Data = _result.results,
                 };
 
                 return Ok(results);

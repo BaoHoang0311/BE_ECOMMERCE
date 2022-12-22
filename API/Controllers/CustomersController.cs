@@ -28,16 +28,18 @@ namespace API.Controllers
         public async Task<IActionResult> GetCustomers(string sortBy, int? pageNumber, int pageSize)
         {
             var dulieu = await _customerRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
-            var AllCus = await _customerRepository.GetAllAsync();
-            var totalCus = AllCus.ToList().Count();
+
+            //var AllCus = await _customerRepository.GetAllAsync();
+            //var totalCus = AllCus.ToList().Count();
+
             if (dulieu == null) return NotFound();
 
             // return list with special
             return Ok(new
             {
                 message = "GetCustomers success",
-                total = totalCus,
-                data = dulieu
+                total = dulieu.totalCus,
+                data = dulieu.results
             });
         }
         [HttpGet("{id}")]
