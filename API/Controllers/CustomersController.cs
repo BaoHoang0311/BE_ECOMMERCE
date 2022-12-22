@@ -40,18 +40,6 @@ namespace API.Controllers
                 data = dulieu
             });
         }
-        [HttpGet("/api/all-cus")]
-        public async Task<IActionResult> GetCustomers()
-        {
-            var AllCus = await _customerRepository.GetAllAsync();
-
-            // return list with special
-            return Ok(new
-            {
-                message = "GetCustomers success",
-                data = AllCus
-            });
-        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomesrsById(int id)
         {

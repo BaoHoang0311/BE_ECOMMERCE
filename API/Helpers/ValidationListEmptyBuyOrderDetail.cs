@@ -5,7 +5,7 @@ using API.Dtos;
 
 namespace API.Helpers
 {
-    public class ValidationListEmptyBuyOrderDetail: ValidationAttribute
+    public class ValidationListEmptyBuyOrderDetail : ValidationAttribute
     {
         public ValidationListEmptyBuyOrderDetail()
         {

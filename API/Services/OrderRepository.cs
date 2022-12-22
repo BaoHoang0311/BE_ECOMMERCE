@@ -16,12 +16,12 @@ using API.Helpers;
 
 namespace API.Services
 {
-    public class OrderServices : EntityBaseRepository<Order>, IOrderRepository
+    public class OrderRepository : EntityBaseRepository<Order>, IOrderRepository
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
 
-        public OrderServices(MyDbContext context, IMapper mapper)
+        public OrderRepository(MyDbContext context, IMapper mapper)
             : base(context)
         {
             _context = context;

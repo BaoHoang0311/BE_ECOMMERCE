@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Entites;
 using API.Helpers;
 using API.Helpers.Nlog;
 using API.Repository;
@@ -43,14 +44,14 @@ namespace API
 
             services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
 
-            services.AddScoped<IProductRepository, ProductServices>();
-            services.AddScoped<ICustomerRepository,CustomerServices>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICustomerRepository,CustomerRepository>();
 
-            services.AddScoped<IOrderRepository, OrderServices>();
-            services.AddScoped<IOrderDetailRepository, OrderDetailServices>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 
-            services.AddScoped<IBuyOrderRepository, BuyOrderServices>();
-            services.AddScoped<IBuyOrderDetailRepository, BuyOrderDetailServices>();
+            services.AddScoped<IBuyOrderRepository, BuyOrderRepository>();
+            services.AddScoped<IBuyOrderDetailRepository, BuyOrderDetailRepository>();
 
             //Nlog
             services.AddSingleton<ILoggerManager, LoggerManager>();
@@ -62,10 +63,7 @@ namespace API
                 options.JsonSerializerOptions.WriteIndented = true;
             });
 
-            //System.IO.FileNotFoundException: 'Failed to load NLog LoggingConfiguration. Searched the following locations:
-            //-C:\NglehoangBao\BE_ecommerce\API / nlog.config
-
-
+  
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), @"\Helpers\Nlog\nlog.config"));
 
             // Configure the HTTP request pipeline.
@@ -84,7 +82,7 @@ namespace API
             app.MapControllers();
 
             // auto update migrations, cd API ->dotnet watch run 
-            // auto cập nhật ~ thằng migrations pending khi pull form github
+            // auto cập nhật ~ thằng migrations pending khi gitpull
             using var scope = app.Services.CreateScope();
             var service = scope.ServiceProvider;
             var loggerFactory = service.GetRequiredService<ILoggerFactory>();

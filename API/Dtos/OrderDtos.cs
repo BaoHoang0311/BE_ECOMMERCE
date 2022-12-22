@@ -1,7 +1,9 @@
 ﻿using API.Entites;
 using API.Helpers;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace API.Dtos
 {
@@ -15,5 +17,9 @@ namespace API.Dtos
         public decimal TotalPrice { get; set; }
         [ValidationListEmptyOrderDetail]
         public List<OrderDetailDtos> orderDetailDtos { get; set; }
+        //public bool IsValid()
+        //{
+        //    return orderDetailDtos != null && orderDetailDtos.Any();
+        //}
     }
 }

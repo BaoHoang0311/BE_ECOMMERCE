@@ -13,12 +13,12 @@ using System.Xml.Linq;
 
 namespace API.Services
 {
-    public class BuyOrderServices : EntityBaseRepository<BuyOrder>, IBuyOrderRepository
+    public class BuyOrderRepository : EntityBaseRepository<BuyOrder>, IBuyOrderRepository
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
 
-        public BuyOrderServices(MyDbContext context, IMapper mapper)
+        public BuyOrderRepository(MyDbContext context, IMapper mapper)
             : base(context)
         {
             _context = context;

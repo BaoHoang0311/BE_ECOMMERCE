@@ -1,4 +1,5 @@
 ﻿using API.Dtos;
+using API.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,6 @@ namespace API.Repository
         Task UpdateAsync(T entity);
 
         // Sort with table
-        Task<IEnumerable<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties );
+        Task<PaggingInfo<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties );
     }
 }
-//Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class BuyOrderDetailServices : EntityBaseRepository<BuyOrderDetail>, IBuyOrderDetailRepository
+    public class BuyOrderDetailRepository : EntityBaseRepository<BuyOrderDetail>, IBuyOrderDetailRepository
     {
         private readonly MyDbContext _context;
-        public BuyOrderDetailServices(MyDbContext context) : base(context)
+        public BuyOrderDetailRepository(MyDbContext context) : base(context)
         {
             _context = context;
         }
@@ -20,6 +20,11 @@ namespace API.Services
         {
             var data = await _context.BuyOrderDetails.Where(x => x.BuyOrderId == id).ToListAsync();
             return data;
+        }
+
+        Task<IEnumerable<BuyOrderDetail>> IBuyOrderDetailRepository.GetAllListById(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

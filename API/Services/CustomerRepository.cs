@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class CustomerServices : EntityBaseRepository<Customer>, ICustomerRepository
+    public class CustomerRepository : EntityBaseRepository<Customer>, ICustomerRepository
     {
-        public CustomerServices(MyDbContext context) : base(context)
+        public CustomerRepository(MyDbContext context) : base(context)
         {
 
         }

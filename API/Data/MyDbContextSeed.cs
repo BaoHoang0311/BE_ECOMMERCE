@@ -21,16 +21,6 @@ namespace API.Data
         {
             try
             {
-                //if (!context.ProductBrands.Any())
-                //{
-                //    var brandsData = File.ReadAllText("../API/Data/SeedData/brands.json");
-                //    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
-                //    foreach (var item in brands)
-                //    {
-                //        context.ProductBrands.Add(item);
-                //    }
-                //    await context.SaveChangesAsync();
-                //}
 
                 if (!context.Products.Any())
                 {
