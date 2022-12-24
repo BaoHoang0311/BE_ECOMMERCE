@@ -7,7 +7,7 @@ namespace API.Dtos
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(10, MinimumLength = 3)]
+        [StringLength(1000, MinimumLength = 3)]
         public string FullName { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]

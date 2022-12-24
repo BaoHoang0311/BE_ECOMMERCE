@@ -81,14 +81,19 @@ namespace API
 
             app.MapControllers();
 
+
             // auto update migrations, cd API ->dotnet watch run 
             // auto cập nhật ~ thằng migrations pending khi gitpull
             using var scope = app.Services.CreateScope();
             var service = scope.ServiceProvider;
             var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+
+
+
             try
             {
                 var context = service.GetRequiredService<MyDbContext>();
+                await MyDbContextSeed.SeedAsync(context, loggerFactory);
                 await context.Database.MigrateAsync();
                 //Seed product data
                 await MyDbContextSeed.SeedAsync(context, loggerFactory);
@@ -106,4 +111,3 @@ namespace API
         }
     }
 }
-// B1- F
