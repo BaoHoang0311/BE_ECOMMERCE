@@ -1,7 +1,6 @@
 ﻿using API.Data;
 using API.Dtos;
 using API.Entites;
-using API.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -13,10 +12,11 @@ using System.Xml.Linq;
 using NuGet.Versioning;
 using Microsoft.AspNetCore.Razor.Language;
 using API.Helpers;
+using API.Repository;
 
 namespace API.Services
 {
-    public class OrderServices : EntityBaseRepository<Order>, IOrderRepository
+    public class OrderServices : EntityBaseRepository<Order>, IOrderServices
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
@@ -81,7 +81,7 @@ namespace API.Services
             }
             return false;
         }
-        
+
         private decimal TotalPrice(List<OrderDetail> orderDetail)
         {
             decimal res = 0;
@@ -161,7 +161,7 @@ namespace API.Services
         }
 
         // FE xử lý
-        public async Task<bool> AddOrderAsync_1 (OrderDtos orderDtos)
+        public async Task<bool> AddOrderAsync_1(OrderDtos orderDtos)
         {
             var cus = await _context.Customers.FirstOrDefaultAsync(o => o.Id == orderDtos.CustomerId);
             if (cus != null)
@@ -213,6 +213,6 @@ namespace API.Services
             }
             return false;
         }
-        
+
     }
 }

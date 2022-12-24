@@ -1,10 +1,11 @@
 ﻿using API.Entites;
+using API.Repository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace API.Repository
+namespace API.Services
 {
-    public interface IBuyOrderDetailRepository : IEntityBaseRepository<BuyOrderDetail>
+    public interface IBuyOrderDetailServices : IEntityBaseRepository<BuyOrderDetail>
     {
         Task<IEnumerable<BuyOrderDetail>> GetAllListById(int id);
     }

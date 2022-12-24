@@ -1,7 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +17,9 @@ namespace API.Controllers
     [ApiController]
     public class OrderDetailController : ControllerBase
     {
-        private IOrderDetailRepository _orderDetailRepository;
+        private IOrderDetailServices _orderDetailRepository;
         private readonly IMapper _mapper;
-        public OrderDetailController(IOrderDetailRepository orderDetailRepository, IMapper mapper)
+        public OrderDetailController(IOrderDetailServices orderDetailRepository, IMapper mapper)
         {
             _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
@@ -35,7 +35,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "GetOrderDetails thanh cong",
+                message = "GetOrderDetails success",
             };
 
             return Ok(results);
@@ -54,7 +54,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateOrderDetails thanh cong",
+                    message = "UpdateOrderDetails success",
                 };
                 return Ok(results);
             }
@@ -67,7 +67,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "DeleteOrderDetail thanh cong",
+                message = "DeleteOrderDetail success",
             };
 
             return Ok(results);
@@ -83,7 +83,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "GetOrderDetailById thanh cong",
+                message = "GetOrderDetailById success",
             };
 
             return Ok(results);

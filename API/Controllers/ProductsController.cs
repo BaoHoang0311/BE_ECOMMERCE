@@ -1,7 +1,8 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Helpers.Nlog;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,12 +22,14 @@ namespace API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private IProductRepository _productRepository;
+        private IProductServices _productRepository;
         private readonly IMapper _mapper;
-        public ProductsController(IProductRepository services, IMapper mapper)
+        private readonly ILoggerManager _logger;
+        public ProductsController(IProductServices services, IMapper mapper, ILoggerManager logger)
         {
             _productRepository = services;
             _mapper = mapper;
+            _logger = logger;
         }
 
         //[HttpGet("get-pro")]
@@ -47,13 +50,14 @@ namespace API.Controllers
         {
             try
             {
+                _logger.LogInfo("Get All Product");
                 var _result = await _productRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
 
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetAllProduct thanh cong",
-                    Data = _result,
+                    message = "GetAllProduct success",
+                    Data = _result.results,
                 };
 
                 return Ok(results);
@@ -61,7 +65,8 @@ namespace API.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Khong ton tai danh sach san pham");
+                _logger.LogWarning("Co loi xay ra ");
+                return BadRequest("Not find list of Products");
             }
         }
 
@@ -77,7 +82,7 @@ namespace API.Controllers
             var results = new results()
             {
                 statusCode = 200,
-                message = "GetProductsById thanh cong",
+                message = "GetProductsById success",
                 Data = dulieu,
             };
 
@@ -86,7 +91,7 @@ namespace API.Controllers
 
         // api/Products/name?name=3
 
-        //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+        //api/Products
         [HttpPost]
         public async Task<IActionResult> CreateProduct(ProductDtos productDtos)
         {
@@ -101,22 +106,21 @@ namespace API.Controllers
                     var results = new results()
                     {
                         statusCode = 200,
-                        message = "CreateProduct thanh cong",
+                        message = "CreateProduct success",
                     };
                     return Ok(results);
                 }
-                return BadRequest("CreateProduct khong thanh cong");
+                return BadRequest("CreateProduct failed");
             }
             // ko nhap vao id
             catch
             {
-                return BadRequest("CreateProduct khong thanh cong");
+                return BadRequest("CreateProduct failed");
             }
         }
 
-        //api/Products?id=36a8b2df-749b-4eb8-a654-b37c5fa65181
+        //api/Products
 
-        //https://localhost:44381/api/Products?id=9
         [HttpPut]
         public async Task<IActionResult> UpdateProduct(Product product)
         {
@@ -131,22 +135,22 @@ namespace API.Controllers
                     var results = new results()
                     {
                         statusCode = 200,
-                        message = "UpdateProduct thanh cong",
+                        message = "UpdateProduct success",
                     };
 
                     return Ok(results);
                 }
-                return BadRequest("UpdateProduct khong thanh cong");
+                return BadRequest("UpdateProduct failed");
             }
             catch
             {
-                return BadRequest("UpdateProduct khong thanh cong");
+                return BadRequest("UpdateProduct failed");
             }
 
         }
 
+        // https://localhost:44381/api/Product?id=9
         [HttpDelete]
-        //https://localhost:44381/api/Orders/4
         public async Task<IActionResult> DeleteProduct(int id)
         {
             try
@@ -155,7 +159,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateProduct thanh cong",
+                    message = "UpdateProduct success",
                 };
                 return Ok(results);
             }

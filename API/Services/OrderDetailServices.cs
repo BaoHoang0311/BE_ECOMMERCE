@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class OrderDetailServices : EntityBaseRepository<OrderDetail>, IOrderDetailRepository
+    public class OrderDetailServices : EntityBaseRepository<OrderDetail>, IOrderDetailServices
     {
         private readonly MyDbContext _context;
         public OrderDetailServices(MyDbContext context) : base(context)

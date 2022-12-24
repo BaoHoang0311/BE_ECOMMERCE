@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class ProductServices : EntityBaseRepository<Product>, IProductRepository
+    public class ProductServices : EntityBaseRepository<Product>, IProductServices
     {
 
         public ProductServices(MyDbContext context) : base(context)

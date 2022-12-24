@@ -1,25 +1,38 @@
 ﻿using API.Repository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Helpers
 {
-    public class Pagging<T> : List<T> 
+    public class PaggingInfo<T>
     {
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
-        public Pagging(List<T> items, int count, int pageIndex , int pageSize)
-        {
-            PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            this.AddRange(items);
-        }
-        public static Pagging<T> Create(IQueryable<T> source, int pageIndex, int pageSize)
+        public int totalCus { get; set; }
+        public List<T> results { get; set; }
+    }
+    public class Pagging<T> 
+    {
+        public async static Task<PaggingInfo<T>> Create(IQueryable<T> source, int pageIndex, int pageSize)
         {
             var count = source.Count();
-            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-            return new Pagging<T>(items, count, pageIndex, pageSize);
+            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            int PageIndex = pageIndex;
+
+            int TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            var res = new PaggingInfo<T>()
+            {
+                PageIndex = PageIndex,
+                TotalPages = TotalPages,
+                results = items,
+                totalCus = count,
+            };
+            return res ;
         }
     }
+
 }

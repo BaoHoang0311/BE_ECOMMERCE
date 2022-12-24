@@ -21,16 +21,10 @@ namespace API.Data
         {
             try
             {
-                //if (!context.ProductBrands.Any())
-                //{
-                //    var brandsData = File.ReadAllText("../API/Data/SeedData/brands.json");
-                //    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
-                //    foreach (var item in brands)
-                //    {
-                //        context.ProductBrands.Add(item);
-                //    }
-                //    await context.SaveChangesAsync();
-                //}
+                var customersData1 = File.ReadAllText("../API/Data/SeedData/MOCK_DATA.json");
+                var customers1 = JsonSerializer.Deserialize<List<Customer>>(customersData1);
+                await context.Customers.AddRangeAsync(customers1);
+                await context.SaveChangesAsync();
 
                 if (!context.Products.Any())
                 {

@@ -1,15 +1,15 @@
 ﻿using API.Data;
 using API.Dtos;
 using API.Entites;
-using API.Services;
+using API.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace API.Repository
+namespace API.Services
 {
-    public interface IOrderRepository :IEntityBaseRepository<Order>
+    public interface IOrderServices : IEntityBaseRepository<Order>
     {
         // Be xử lý
         Task<bool> AddOrderAsync(OrderDtos orderDtos);

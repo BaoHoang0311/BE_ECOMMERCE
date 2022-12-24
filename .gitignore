@@ -92,7 +92,7 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-*.log
+
 *.tlog
 *.vspscc
 *.vssscc
@@ -475,3 +475,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/API/internal_logs/logs/2022-12-21_logfile.txt
+/API/internal_logs/logs/2022-12-22_logfile.txt
+/API/internal_logs/logs/2022-12-21_logfile.txt
+/API/internal_logs/logs/2022-12-22_logfile.txt
+/API/internal_logs/internallog.txt
+/API/internal_logs/internallog.txt
+/API/internal_logs/logs/2022-12-22_logfile.txt
+/API/internal_logs/logs/2022-12-21_logfile.txt

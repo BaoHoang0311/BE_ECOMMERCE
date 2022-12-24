@@ -1,7 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,9 @@ namespace API.Controllers
     [ApiController]
     public class BuyOrderDetailController : ControllerBase
     {
-        private readonly IBuyOrderDetailRepository _buyOrderDetailRepository;
+        private readonly IBuyOrderDetailServices _buyOrderDetailRepository;
         private readonly IMapper _mapper;
-        public BuyOrderDetailController(IBuyOrderDetailRepository buyOrderDetailRepository, IMapper mapper)
+        public BuyOrderDetailController(IBuyOrderDetailServices buyOrderDetailRepository, IMapper mapper)
         {
             _buyOrderDetailRepository= buyOrderDetailRepository;
             _mapper = mapper;
@@ -33,7 +33,7 @@ namespace API.Controllers
 
             return Ok(new
             {
-                message = "GetBuyOrderDetails thanh cong",
+                message = "GetBuyOrderDetails success",
                 data = dulieu
             });
         }
@@ -51,7 +51,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateBuyOrderDetails thanh cong",
+                    message = "UpdateBuyOrderDetails success",
                 };
                 return Ok(results);
             }
@@ -61,7 +61,12 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteBuyOrderDetail(int id)
         {
             await _buyOrderDetailRepository.DeleteAsync(id);
-            return Ok(new { message = "xoa thanh cong" });
+            var results = new results()
+            {
+                statusCode = 200,
+                message = "DeleteBuyOrderDetail success",
+            };
+            return Ok(results);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBuyOrderDetailById(int id)
@@ -73,7 +78,7 @@ namespace API.Controllers
 
             return Ok(new
             {
-                message = "GetBuyOrderDetailById thanh cong",
+                message = "GetBuyOrderDetailById success",
                 data = dulieu
             });
         }

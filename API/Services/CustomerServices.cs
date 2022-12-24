@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace API.Services
 {
-    public class CustomerServices : EntityBaseRepository<Customer>, ICustomerRepository
+    public class CustomerServices : EntityBaseRepository<Customer>, ICustomerServices
     {
         public CustomerServices(MyDbContext context) : base(context)
         {

@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace API.Services
+namespace API.Repository
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityID, new()
     {
@@ -30,13 +30,6 @@ namespace API.Services
             var data = await _context.Set<T>().ToListAsync();
             return data;
         }
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> query = _context.Set<T>();
-            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            return await query.ToListAsync();
-        }
-
         public async Task<T> GetByIdAsync(int id)
         {
             var data = await _context.Set<T>().FirstOrDefaultAsync(m => m.Id == id);
@@ -81,27 +74,28 @@ namespace API.Services
 
         }
 
-        public async Task<IEnumerable<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<PaggingInfo<T>> GetAllAsyncSortByIdAndPaging(string sortBy, int? pageNumber, int pageSize, params Expression<Func<T, object>>[] includeProperties)
         {
 
             IQueryable<T> query = _context.Set<T>();
             query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            var list = await query.OrderBy(m => m.Id).ToListAsync();
+            var list = query.OrderBy(m => m.Id);
 
             if (!string.IsNullOrEmpty(sortBy))
             {
                 switch (sortBy)
                 {
                     case "Id":
-                        list = list.OrderByDescending(n => n.Id).ToList();
+                        list = list.OrderByDescending(n => n.Id);
                         break;
                     default:
                         break;
                 }
             }
             //int pageSize = 5;
-            list = Pagging<T>.Create(list.AsQueryable(), pageNumber ?? 1, pageSize);
-            return list;
+            var res = await Pagging<T>.Create(list.AsQueryable(), pageNumber ?? 1, pageSize);
+            return res;
         }
+
     }
 }

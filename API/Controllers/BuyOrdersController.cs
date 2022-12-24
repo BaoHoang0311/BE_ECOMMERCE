@@ -1,7 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,9 @@ namespace API.Controllers
     [ApiController]
     public class BuyOrdersController : ControllerBase
     {
-        private readonly IBuyOrderRepository _BuyorderRepository;
+        private readonly IBuyOrderServices _BuyorderRepository;
         private readonly IMapper _mapper;
-        public BuyOrdersController(IBuyOrderRepository services, IMapper mapper)
+        public BuyOrdersController(IBuyOrderServices services, IMapper mapper)
         {
             _BuyorderRepository = services;
             _mapper = mapper;
@@ -28,20 +28,20 @@ namespace API.Controllers
         {
             try
             {
-                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize);
+                var _result = await _BuyorderRepository.GetAllAsyncSortByIdAndPaging(sortBy, pageNumber, pageSize, m => m.customer, m => m.BuyOrderDetails);
 
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetAllBuyOrder thanh cong",
-                    Data = _result,
+                    message = "GetAllBuyOrder success",
+                    Data = _result.results,
                 };
 
                 return Ok(results);
             }
             catch (Exception)
             {
-                return BadRequest("Khong ton tai danh sach BuyOrder");
+                return BadRequest("Not exits BuyOrder");
             }
         }
 
@@ -55,7 +55,8 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetBuyOrderbyOrderId thanh cong",
+                    message = "GetBuyOrderbyOrderId success",
+                    Data = listOrder
                 };
                 return Ok(results);
             }
@@ -69,6 +70,7 @@ namespace API.Controllers
         {
             //var check = await _BuyorderRepository.AddBuyOrderAsync(buyorderDtos);
             var check = await _BuyorderRepository.AddBuyOrderAsync_1(buyorderDtos);
+      
             if (check == true)
             {
                 if (check == true)
@@ -76,15 +78,15 @@ namespace API.Controllers
                     var results = new results()
                     {
                         statusCode = 200,
-                        message = "AddBuyOrder thanh cong",
+                        message = "AddBuyOrder success",
                     };
                     return Ok(results);
                 }
             }
             return BadRequest();
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBuyOrderbyOrderId(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBuyOrder(int id)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "DeleteBuyOrderbyOrderId thanh cong",
+                    message = "DeleteBuyOrderbyOrderId success",
                 };
                 return Ok(results);
             }
@@ -106,12 +108,13 @@ namespace API.Controllers
         public async Task<IActionResult> Update(BuyOrderDtos buyorderDtos)
         {
             var check = await _BuyorderRepository.UpdateBuyOrder(buyorderDtos);
+            var results = new results();
+
             if (check == true)
             {
-                var results = new results()
                 {
-                    statusCode = 200,
-                    message = "DeleteBuyOrderbyOrderId thanh cong",
+                    results.statusCode = 200;
+                    results.message = "DeleteBuyOrderbyOrderId success";
                 };
                 return Ok(results);
             }

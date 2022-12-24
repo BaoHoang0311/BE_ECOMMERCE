@@ -1,5 +1,7 @@
 ﻿using API.Data;
+using API.Entites;
 using API.Helpers;
+using API.Helpers.Nlog;
 using API.Repository;
 using API.Services;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Fluent;
 using System;
+using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -39,14 +44,17 @@ namespace API
 
             services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
 
-            services.AddScoped<IProductRepository, ProductServices>();
-            services.AddScoped<ICustomerRepository,CustomerServices>();
+            services.AddScoped<IProductServices, ProductServices>();
+            services.AddScoped<ICustomerServices,CustomerServices>();
 
-            services.AddScoped<IOrderRepository, OrderServices>();
-            services.AddScoped<IOrderDetailRepository, OrderDetailServices>();
+            services.AddScoped<IOrderServices, OrderServices>();
+            services.AddScoped<IOrderDetailServices, OrderDetailServices>();
 
-            services.AddScoped<IBuyOrderRepository, BuyOrderServices>();
-            services.AddScoped<IBuyOrderDetailRepository, BuyOrderDetailServices>();
+            services.AddScoped<IBuyOrderServices, BuyOrderServices>();
+            services.AddScoped<IBuyOrderDetailServices, BuyOrderDetailServices>();
+
+            //Nlog
+            services.AddSingleton<ILoggerManager, LoggerManager>();
 
 
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -54,6 +62,9 @@ namespace API
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+
+  
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), @"\Helpers\Nlog\nlog.config"));
 
             // Configure the HTTP request pipeline.
             var app = builder.Build();
@@ -70,14 +81,19 @@ namespace API
 
             app.MapControllers();
 
+
             // auto update migrations, cd API ->dotnet watch run 
-            // auto cập nhật ~ thằng migrations pending khi pull form github
+            // auto cập nhật ~ thằng migrations pending khi gitpull
             using var scope = app.Services.CreateScope();
             var service = scope.ServiceProvider;
             var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+
+
+
             try
             {
                 var context = service.GetRequiredService<MyDbContext>();
+                await MyDbContextSeed.SeedAsync(context, loggerFactory);
                 await context.Database.MigrateAsync();
                 //Seed product data
                 await MyDbContextSeed.SeedAsync(context, loggerFactory);
@@ -95,4 +111,3 @@ namespace API
         }
     }
 }
-// B1- F

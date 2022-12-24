@@ -1,7 +1,6 @@
 ﻿using API.Data;
 using API.Dtos;
 using API.Entites;
-using API.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -10,10 +9,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using API.Repository;
 
 namespace API.Services
 {
-    public class BuyOrderServices : EntityBaseRepository<BuyOrder>, IBuyOrderRepository
+    public class BuyOrderServices : EntityBaseRepository<BuyOrder>, IBuyOrderServices
     {
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ namespace API.Services
         }
         public async Task<IList<BuyOrder>> GetBuyOrderbyOrderId(int BuyOrderId)
         {
-            var listorder = await _context.BuyOrders.Include(o => o.BuyOrderDetails).ThenInclude(o => o.Product)
+            var listorder = await _context.BuyOrders.Where(x => x.Id == BuyOrderId).Include(o => o.BuyOrderDetails).ThenInclude(o => o.Product)
                                                 .ToListAsync();
 
             if (listorder != null)
@@ -151,8 +151,6 @@ namespace API.Services
                 buyorder.ModifiedDate = DateTime.Now;
                 buyorder.ModifiedBy = "admin";
 
-                //buyorder.TotalPrice = TotalPrice(buyorder.BuyOrderDetails);
-
                 if (buyorder.TotalPrice > 0)
                 {
                     var list = buyorder.BuyOrderDetails;
@@ -176,8 +174,6 @@ namespace API.Services
                                 buyorderDetail.CreatedDate = DateTime.Now;
                                 buyorderDetail.ModifiedDate = DateTime.Now;
                                 buyorderDetail.BuyOrderId = buyorder.Id;
-
-                                //buyorderDetail.TotalPrice = item.price * item.ammount;
 
                                 await _context.BuyOrderDetails.AddAsync(buyorderDetail);
 

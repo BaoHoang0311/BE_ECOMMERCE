@@ -1,7 +1,7 @@
 ﻿using API.Dtos;
 using API.Entites;
 using API.Helpers;
-using API.Repository;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,9 @@ namespace API.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderServices _orderRepository;
         private readonly IMapper _mapper;
-        public OrdersController(IOrderRepository services, IMapper mapper)
+        public OrdersController(IOrderServices services, IMapper mapper)
         {
             _orderRepository = services;
             _mapper = mapper;
@@ -41,15 +41,15 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "GetAllProduct thanh cong",
-                    Data = _result,
+                    message = "GetAllProduct success",
+                    Data = _result.results,
                 };
 
                 return Ok(results);
             }
             catch (Exception)
             {
-                return BadRequest("Khong ton tai danh sach Order");
+                return BadRequest("Not find list of Order");
             }
         }
        
@@ -83,7 +83,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "AddOrder thanh cong",
+                    message = "AddOrder success",
                 };
                 return Ok(results);
             }
@@ -100,7 +100,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "DeleteOrderbyOrderId thanh cong",
+                    message = "DeleteOrderbyOrderId success",
                 };
                 return Ok(results);
             }
@@ -119,7 +119,7 @@ namespace API.Controllers
                 var results = new results()
                 {
                     statusCode = 200,
-                    message = "UpdateProduct thanh cong",
+                    message = "UpdateProduct success",
                 };
                 return Ok(results);
             }
