@@ -21,16 +21,18 @@ namespace API.Data
         {
             try
             {
-                var customersData1 = File.ReadAllText("../API/Data/SeedData/MOCK_DATA.json");
-                var customers1 = JsonSerializer.Deserialize<List<Customer>>(customersData1);
-                await context.Customers.AddRangeAsync(customers1);
-                await context.SaveChangesAsync();
-
+                if (!context.Customers.Any())
+                {
+                    var customersData1 = File.ReadAllText("../API/Data/SeedData/MOCK_DATA.json");
+                    var customers1 = JsonSerializer.Deserialize<List<Customer>>(customersData1);
+                    await context.Customers.AddRangeAsync(customers1);
+                    await context.SaveChangesAsync();
+                }
                 if (!context.Products.Any())
                 {
                     var productsData = File.ReadAllText("../API/Data/SeedData/products.json");
                     var products = JsonSerializer.Deserialize<List<Product>>(productsData);
-                    
+
                     foreach (var item in products)
                     {
                         //item.Id = Guid.NewGuid().ToString();
