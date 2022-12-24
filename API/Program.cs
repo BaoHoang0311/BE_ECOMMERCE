@@ -81,6 +81,7 @@ namespace API
 
             app.MapControllers();
 
+            app.UseStaticFiles();
 
             // auto update migrations, cd API ->dotnet watch run 
             // auto cập nhật ~ thằng migrations pending khi gitpull
@@ -116,6 +117,8 @@ namespace API
 // main : 11h31
 // main : 11h34
 // main : 11h35
+// main : 12h19
+// main : 12h21
 
 
 
