@@ -118,6 +118,7 @@ namespace API.Services
 
                 _context.Products.Attach(sp);
                 _context.Entry(sp).Property(x => x.Amount).IsModified = true;
+                //dasdas
                 _context.SaveChanges();
                 return true;
             }
