@@ -117,7 +117,7 @@ namespace API.Services
                 sp.Amount = sp.Amount - orderDetail.ammount;
 
                 _context.Products.Attach(sp);
-                _context.Entry(sp).Property(x => x.Amount).IsModified = true;
+                //_context.Entry(sp).Property(x => x.Amount).IsModified = true;
                 //dasdas
                 _context.SaveChanges();
                 return true;
