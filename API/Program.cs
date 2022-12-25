@@ -112,23 +112,11 @@ namespace API
         }
     }
 }
-// main
-// main : 11h30
-// main : 11h31
-// main : 11h34
-// main : 11h35
-// main : 12h19
-// main : 12h21
-// main : 12h33
-// B2 : 2h01
 
-// B2 : 11h07
-// B2 : 11h08
-// B2 : 11h09
-// B2 : 11h12
+// bug/update 8h05
+// bug1 8h24
 
-// B1 : 11h06
-// B1 : 12h05
+
 
 
 
