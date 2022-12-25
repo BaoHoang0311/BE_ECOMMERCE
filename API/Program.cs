@@ -114,7 +114,11 @@ namespace API
 }
 
 // bug/update 8h05
+<<<<<<< HEAD
 // bug1 8h39 - bug
+=======
+// bug1 8h37 B2 
+>>>>>>> c612369f422f0ba69c1ce9ef4db1ada51299ff2b
 
 
 
